@@ -4,9 +4,11 @@ import BehaviorWithList, { BehaviorWithListReturnData, BehaviorWithListReturnOpt
 
 const listBehavior = BehaviorWithList({
     namespace: 'list',
-    getListApi: () => {
+    getListApi: (data) => {
         return new Promise((resolve) => {
-            resolve({ listData: new Array(10).fill(1), total: 8, isLast: false })
+            setTimeout(() => {
+                resolve({ listData: new Array(10).fill(1), total: 8, isLast: false })
+            }, 1000)
         })
     }
 })
@@ -20,9 +22,6 @@ type IListPageData = {
 Page<IListPageData, IListPageOption>({
     //@ts-ignore
     behaviors: [listBehavior],
-    /**
-     * 页面的初始数据
-     */
     data: {
         a: 1
     },
@@ -30,7 +29,6 @@ Page<IListPageData, IListPageOption>({
     onLoad() {
         this.getList()
     },
-
 
     onReady() {
 

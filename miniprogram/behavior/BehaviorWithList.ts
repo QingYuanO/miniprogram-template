@@ -12,7 +12,7 @@ interface IGetListParams {
     [key: string]: any;
 }
 
-interface IBehaviorWithList<D> {
+interface IBehaviorWithList {
     namespace: string;
     /**
      * 每项数据的唯一标识，默认【id】
@@ -20,12 +20,12 @@ interface IBehaviorWithList<D> {
     key?: string;
     pageSize?: number;
     getListApi: (params: IGetListParams) => Promise<IListResult>;
-    addItemApi?: (data: D) => Promise<RequestPrimoseResult>;
+    addItemApi?: (data: any) => Promise<RequestPrimoseResult>;
     /**
      * @param data:更新的数据
      * @description 参数data必须包含唯一标识取参数key的值，默认为【id】
      */
-    updateItemApi?: (data: D) => Promise<RequestPrimoseResult>;
+    updateItemApi?: (data: any) => Promise<RequestPrimoseResult>;
     deleteItemApi?: (id: any) => Promise<RequestPrimoseResult>;
 }
 
@@ -36,15 +36,19 @@ export interface BehaviorWithListReturnData {
     total?: number;
     isLast?: boolean;
 }
+type GetListParams = {
+    type?: 'init' | 'push',
+    extraData?: Record<string, any>
+}
 export interface BehaviorWithListReturnOption {
     nextPage: () => void;
-    getList: () => Promise<any>;
+    getList: (params?: GetListParams) => Promise<any>;
     updateItem: (data: any) => Promise<any>;
     addItem: (data: any) => Promise<any>;
     deleteItem: (id: any) => Promise<any>;
 }
 
-const BehaviorWithList = <D>(params: IBehaviorWithList<D>) => {
+const BehaviorWithList = (params: IBehaviorWithList) => {
     const pageSize = params.pageSize ?? 10;
     const key = params.key ?? "id";
     const {
@@ -62,6 +66,7 @@ const BehaviorWithList = <D>(params: IBehaviorWithList<D>) => {
                 listData: [],
                 total: 0,
                 isLast: false,
+                isFetch: false
             },
         },
 
@@ -69,37 +74,49 @@ const BehaviorWithList = <D>(params: IBehaviorWithList<D>) => {
             [`${namespace}.pageNum`]: function (data) {
                 console.log(data);
                 if (data === 1) {
-                    this.getList('init')
+                    this.getList({ type: 'init' })
                 } else {
-                    this.getList('push')
+                    this.getList({ type: 'push' })
                 }
             },
         },
         methods: {
             nextPage() {
-                const { pageNum } = this.data[namespace];
-                if (!this.data[namespace].isLast) {
+                const { pageNum, isFetch, isLast } = this.data[namespace];
+                if (!isLast && !isFetch) {
                     this.setData({
                         [namespace]: { ...this.data[namespace], pageNum: pageNum + 1 },
                     });
                 }
             },
-            async getList(type: 'init' | 'push' = 'init') {
-                const { pageNum, pageSize, listData } = this.data[namespace];
-                const res = await getListApi({
-                    pageNum,
-                    pageSize,
-                });
-                if (type === 'init') {
+            async getList(params?: GetListParams) {
+                const { pageNum, pageSize, listData, isFetch } = this.data[namespace];
+                const type = params?.type ?? 'init'
+                const extraData = params?.extraData ?? {}
+                if (!isFetch) {
                     this.setData({
-                        [namespace]: { ...this.data[namespace], ...res },
-                    });
-                } else {
-                    this.setData({
-                        [namespace]: { ...this.data[namespace], ...res, listData: listData.concat(res.listData) },
-                    });
+                        [namespace]: { ...this.data[namespace], isFetch: true }
+                    })
+                    try {
+                        const res = await getListApi({
+                            pageNum,
+                            pageSize,
+                            ...extraData
+                        });
+                        const updateData = { ...this.data[namespace], ...res, isFetch: false }
+                        if (type === 'init') {
+                            this.setData({
+                                [namespace]: updateData
+                            });
+                        } else {
+                            this.setData({
+                                [namespace]: { ...updateData, listData: listData.concat(res.listData) },
+                            });
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
-
             },
             async updateItem(data: any) {
                 const { listData } = this.data[namespace];
@@ -153,7 +170,7 @@ const BehaviorWithList = <D>(params: IBehaviorWithList<D>) => {
                                     pageSize: 1,
                                     pageNum: pageNum * pageSize,
                                 });
-                                listData.push(pushDataRes.listData[1]);
+                                listData.push(pushDataRes.listData[0]);
                                 this.setData({
                                     [namespace]: {
                                         ...this.data[namespace],
