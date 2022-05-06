@@ -1,9 +1,6 @@
 import { BehaviorWithStore } from "mobx-miniprogram-bindings";
 import { global, user } from "../../models/index";
 
-
-
-
 export const testBehavior = BehaviorWithStore({
   storeBindings: [{
     namespace: "global",

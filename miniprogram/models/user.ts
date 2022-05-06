@@ -8,9 +8,11 @@ export const user = observable({
     return this.numA + this.numB;
   },
 
-  update_user: action(function () {
-    const sum = this.sum;
-    this.numA = this.numB;
-    this.numB = sum;
-  }),
+  update_user: function () {
+    action(() => {
+      const sum = this.sum;
+      this.numA = this.numB;
+      this.numB = sum;
+    });
+  },
 });
