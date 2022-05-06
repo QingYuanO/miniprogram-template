@@ -30,9 +30,9 @@ interface IBehaviorWithList<D> {
 }
 
 export interface BehaviorWithListReturnData {
-    pageSize?: number;
+    pageSize?: number
     pageNum?: number;
-    listData?: never[];
+    listData?: any[];
     total?: number;
     isLast?: boolean;
 }
@@ -66,8 +66,13 @@ const BehaviorWithList = <D>(params: IBehaviorWithList<D>) => {
         },
 
         watch: {
-            [`${namespace}.pageNum`]: function () {
-                this.getList();
+            [`${namespace}.pageNum`]: function (data) {
+                console.log(data);
+                if (data === 1) {
+                    this.getList('init')
+                } else {
+                    this.getList('push')
+                }
             },
         },
         methods: {
@@ -79,15 +84,22 @@ const BehaviorWithList = <D>(params: IBehaviorWithList<D>) => {
                     });
                 }
             },
-            async getList() {
-                const { pageNum, pageSize } = this.data[namespace];
+            async getList(type: 'init' | 'push' = 'init') {
+                const { pageNum, pageSize, listData } = this.data[namespace];
                 const res = await getListApi({
                     pageNum,
                     pageSize,
                 });
-                this.setData({
-                    [namespace]: { ...this.data[namespace], ...res },
-                });
+                if (type === 'init') {
+                    this.setData({
+                        [namespace]: { ...this.data[namespace], ...res },
+                    });
+                } else {
+                    this.setData({
+                        [namespace]: { ...this.data[namespace], ...res, listData: listData.concat(res.listData) },
+                    });
+                }
+
             },
             async updateItem(data: any) {
                 const { listData } = this.data[namespace];

@@ -18,6 +18,3 @@ export const global = observable({
     })
   },
 });
-autorun(() => {
-  console.log(global.numA);
-});

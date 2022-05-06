@@ -6,7 +6,7 @@ const listBehavior = BehaviorWithList({
     namespace: 'list',
     getListApi: () => {
         return new Promise((resolve) => {
-            resolve({ listData: new Array(8).map((_, idx) => ({ id: idx })), total: 8, isLast: true })
+            resolve({ listData: new Array(10).fill(1), total: 8, isLast: false })
         })
     }
 })
@@ -15,7 +15,7 @@ type IListPageOption = {
 } & BehaviorWithListReturnOption
 type IListPageData = {
     a: number
-} & BehaviorWithListReturnData
+} & { list?: BehaviorWithListReturnData }
 
 Page<IListPageData, IListPageOption>({
     //@ts-ignore
@@ -27,59 +27,33 @@ Page<IListPageData, IListPageOption>({
         a: 1
     },
 
-    /**
-     * 生命周期函数--监听页面加载
-     */
     onLoad() {
         this.getList()
     },
 
-    /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
+
     onReady() {
 
     },
 
-    /**
-     * 生命周期函数--监听页面显示
-     */
     onShow() {
 
     },
 
-    /**
-     * 生命周期函数--监听页面隐藏
-     */
     onHide() {
 
     },
 
-    /**
-     * 生命周期函数--监听页面卸载
-     */
     onUnload() {
 
     },
 
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
     onPullDownRefresh() {
 
     },
 
-    /**
-     * 页面上拉触底事件的处理函数
-     */
     onReachBottom() {
-
+        this.nextPage()
     },
 
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage() {
-
-    }
 })
