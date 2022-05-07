@@ -2,6 +2,6 @@
 <view class="container">
     <view>{{numA}}</view>
     <view>{{sum}}</view>
-    <van-button type="primary" bind:click="update_user">按钮</van-button>
+    <van-button type="primary" bind:click="testToggle">按钮</van-button>
     <van-button type="default" bind:click="toList">默认按钮</van-button>
 </view>
