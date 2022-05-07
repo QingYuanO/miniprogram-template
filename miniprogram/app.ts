@@ -1,5 +1,6 @@
 App<IAppOption>({
   globalData: {},
   onLaunch() {
+		
   },
 })

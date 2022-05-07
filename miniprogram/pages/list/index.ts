@@ -33,7 +33,7 @@ Page<IListPageData, IListPageOption>({
   },
 
   onReady() {
-
+    
   },
 
   onShow() {
