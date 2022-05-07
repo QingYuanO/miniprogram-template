@@ -1,52 +1,62 @@
-
 interface IBehaviorWithAuth {
-	isPageAuth?: boolean;
-	certifiedPagePath?: string;
+  isPageAuth?: boolean;
+  certifiedPagePath?: string;
+  tipFun?: (toFun: () => void) => void;
+}
+
+export interface BehaviorWithAuthInjectData {
+  token?: any;
+}
+
+export interface BehaviorWithAuthInjectOption {
+  isCertified: (isToCertifiedPage?: boolean) => boolean;
 }
 
 const BehaviorWithAuth = (params?: IBehaviorWithAuth) => {
-	const { isPageAuth, certifiedPagePath } = params ?? {}
+  const { isPageAuth, certifiedPagePath, tipFun } = params ?? {};
 
-	return Behavior({
+  return Behavior({
+    data: {
+      token: wx.getStorageSync("token"),
+    },
+    lifetimes: {
+      attached() {
+        // if (isPageAuth && certifiedPagePath && !this.data.token) {
+        //   tipFun?.(this._toCertifiedPage) &&
+        //     wx.navigateTo({ url: certifiedPagePath });
+        // }
+      },
+    },
+    pageLifetimes: {
+      show() {
+        this.setData(
+          {
+            token: wx.getStorageSync("token"),
+          },
+          () => {
+            if (isPageAuth && certifiedPagePath && !this.data.token) {
+              tipFun?.(this._toCertifiedPage) &&
+                wx.navigateTo({ url: certifiedPagePath });
+            }
+          }
+        );
+      },
+    },
+    methods: {
+      isCertified(isToCertifiedPage?: boolean) {
+        if (isToCertifiedPage && certifiedPagePath && !this.data.token) {
+          tipFun?.(this._toCertifiedPage) &&
+            wx.navigateTo({ url: certifiedPagePath });
+        }
+        return !!this.data.token;
+      },
+      _toCertifiedPage() {
+        if (certifiedPagePath) {
+          wx.navigateTo({ url: certifiedPagePath });
+        }
+      },
+    },
+  });
+};
 
-		data: {
-			token: wx.getStorageSync('token')
-		},
-		lifetimes: {
-			created() {
-				//@ts-ignore
-				this._isCertified = this.isCertified 
-			},
-			attached() {
-				if (isPageAuth && certifiedPagePath && !this.data.token) {
-					wx.navigateTo({ url: certifiedPagePath })
-				}
-			},
-		},
-		definitionFilter(defFields: any) {
-			console.log(defFields);
-			console.log(this);
-
-			const authMethods = defFields?.authMethods ?? []
-			authMethods.forEach((item: string) => {
-				if (defFields?.methods[item]) {
-					defFields.methods[item] = () => {
-						if (this.isCertified?.()) {
-							defFields.methods[item]()
-						}
-					}
-				}
-			})
-		},
-		methods: {
-			isCertified(isToCertifiedPage?: boolean) {
-				if (isToCertifiedPage && certifiedPagePath && !this.data.token) {
-					wx.navigateTo({ url: certifiedPagePath })
-				}
-				return !!this.data.token
-			}
-		}
-	})
-}
-
-export default BehaviorWithAuth
+export default BehaviorWithAuth;

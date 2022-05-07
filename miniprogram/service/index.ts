@@ -65,6 +65,10 @@ const ApiService = {
       hasToken = true,
       showErrorToast = false,
     } = extraData;
+    const token = wx.getStorageSync("token");
+    if (hasToken && !token) {
+      return;
+    }
     const contentType = ["POST", "PUT"].includes(method ?? "")
       ? "application/json"
       : "application/x-www-form-urlencoded";
@@ -83,7 +87,7 @@ const ApiService = {
         header: {
           "content-type": contentType,
           //TODO添加自己的token
-          Authorization: hasToken ? "" : "",
+          Authorization: hasToken ? token : "",
           ...header,
         },
         ...otherConfig,
@@ -99,6 +103,7 @@ const ApiService = {
           } else if (codeStatus.includes(HTTP_STATUS.FORBIDDEN)) {
             return showError(msg || "没有权限访问", showErrorToast, result);
           } else if (codeStatus.includes(HTTP_STATUS.AUTHENTICATE)) {
+            wx.setStorageSync("token", "");
             return showError(msg || "需要鉴权", showErrorToast, result);
           } else if (result.statusCode >= 400) {
             return showError(msg, showErrorToast, result);

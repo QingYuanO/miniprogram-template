@@ -1,7 +1,5 @@
 <!--index.wxml-->
 <view class="container">
-    <view>{{numA}}</view>
-    <view>{{sum}}</view>
-    <van-button type="primary" bind:click="testToggle">按钮</van-button>
-    <van-button type="default" bind:click="toList">默认按钮</van-button>
+  <van-button type="primary" bind:click="toList">tolist</van-button>
+  <van-button type="info" bind:click="logout">登出</van-button>
 </view>
