@@ -1,0 +1,5 @@
+<view>
+  <van-empty image="error" description="没有权限">
+    <van-button round type="info" class="bottom-button">返回首页</van-button>
+  </van-empty>
+</view>

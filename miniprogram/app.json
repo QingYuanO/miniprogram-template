@@ -2,7 +2,8 @@
   "pages": [
     "pages/index/index",
     "pages/list/index",
-    "pages/login/index"
+    "pages/login/index",
+    "pages/403/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

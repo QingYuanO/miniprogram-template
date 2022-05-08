@@ -1,8 +1,8 @@
 // pages/list/index.ts
 
 import BehaviorWithAuth, {
-  BehaviorWithAuthInjectData,
   BehaviorWithAuthInjectOption,
+  createNormalAuthBehavior,
 } from "../../behaviors/BehaviorWithAuth";
 import BehaviorWithList, {
   BehaviorWithListInjectData,
@@ -20,40 +20,23 @@ const listBehavior = BehaviorWithList({
   },
 });
 
-const auth = BehaviorWithAuth({
-  isPageAuth: true,
-  certifiedPagePath: "/pages/login/index",
-  tipFun(toFun) {
-    wx.showModal({
-      content: "没有权限，请登录",
-      cancelText: "返回",
-      success(res) {
-        if (res.confirm) {
-          toFun();
-        }
-        if (res.cancel) {
-          wx.navigateBack();
-        }
-      },
-    });
-  },
+const auth = createNormalAuthBehavior({
+  accessPageNeed: ["list"],
+  isPageNeedLogin: true,
 });
 
-type IListPageOption = {} & BehaviorWithListInjectOption &
-  BehaviorWithAuthInjectOption;
+interface IListPageOption
+  extends BehaviorWithListInjectOption,
+    BehaviorWithAuthInjectOption {}
 
-type IListPageData = {
-  a: number;
-} & { list?: BehaviorWithListInjectData } & BehaviorWithAuthInjectData;
+type IListPageData = {} & { list?: BehaviorWithListInjectData };
 
 Page<IListPageData, IListPageOption>({
   //@ts-ignore
-  behaviors: [listBehavior, auth],
-  data: {
-    a: 1,
-  },
-
-  onLoad() {
+  behaviors: [ auth,listBehavior],
+  data: {},
+  onLoad() {},
+  onAuthLoad() {
     this.getListBehavior();
   },
 
