@@ -3,7 +3,7 @@ import { testBehavior } from "./storeBehavior";
 import { behavior as computedBehavior } from "miniprogram-computed";
 import { getSingleImg } from "../../service/api/img";
 import BehaviorWithVisible from "../../behaviors/BehaviorWithVisible";
-import BehaviorWithAuth, {
+import {
   BehaviorWithAuthInjectOption,
   createNormalAuthBehavior,
 } from "../../behaviors/BehaviorWithAuth";
@@ -25,15 +25,14 @@ Page<IIndexPageData, IIndexPageOption>({
     },
   },
   async onLoad() {
-    const a = await getSingleImg();
+    await getSingleImg();
   },
-  onAuthLoad(){
-    console.log('onAuthLoad');
-  },
+  onAuthLoad() {},
   authMethods: [
     {
       name: "toList",
-      notLoginWrapFun(toLoginFun) {
+      access:'list',
+      notLoginCallback(toLoginFun) {
         wx.showModal({
           content: "请登录!",
           showCancel: false,

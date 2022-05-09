@@ -36,9 +36,9 @@ interface IBehaviorWithList {
    * @description 参数data必须包含唯一标识取参数key的值，默认为【id】
    */
   updateItemApi?: (data: any) => Promise<RequestPrimoseResult>;
-   /**
-   * @description 删除数据的接口
-   */
+  /**
+  * @description 删除数据的接口
+  */
   deleteItemApi?: (id: any) => Promise<RequestPrimoseResult>;
 }
 
@@ -60,7 +60,7 @@ export interface BehaviorWithListInjectOption {
 
 /**
  * 
- * @param description 注入列表的增、删、改、查逻辑的behavior
+ * @description 注入列表的增、删、改、查逻辑的behavior
  */
 const BehaviorWithList = (params: IBehaviorWithList) => {
   const key = params.key ?? "id";
@@ -83,12 +83,20 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
       },
     },
     methods: {
+      /**
+       * @description 获取下一页数据
+       * @param extraData Record<string, any>【将会被注入到获取列表数据的接口参数中】
+       */
       nextPageBehavior(extraData?: Record<string, any>) {
         const { pageNum, pageSize, isFetch, isLast } = this.data[namespace];
         if (!isLast && !isFetch) {
           this.getListBehavior({ pageNum: pageNum + 1, pageSize, type: 'loadMore', ...extraData })
         }
       },
+      /**
+       * @description 获取列表数据
+       * @param params  pageSize?: number; pageNum: number; type?: 'initial' | 'loadMore', ...otherParams
+       */
       async getListBehavior(params?: IGetListParams) {
         const { listData, isFetch } = this.data[namespace];
         const { pageNum, pageSize, type, ...extraData } = params ?? { type: 'initial', pageSize: 10, pageNum: 1 }
@@ -117,6 +125,10 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
           }
         }
       },
+      /**
+      * @description 更新数据的方法
+      * @param data 更新的数据
+      */
       async updateItemBehavior(data: any) {
         const { listData } = this.data[namespace];
         try {
@@ -139,6 +151,10 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
           console.log(error);
         }
       },
+      /**
+      * @description 新增数据的方法
+      * @param data 新增的数据
+     */
       async addItemBehavior(data: any) {
         try {
           const res = await addItemApi?.(data);
@@ -149,6 +165,10 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
           console.log(error);
         }
       },
+      /**
+      * @description 删除数据的方法
+      * @param id 删除数据的id
+     */
       async deleteItemBehavior(id: any) {
         const { listData, pageSize, pageNum, isLast } = this.data[namespace];
         try {
