@@ -1,3 +1,19 @@
+
+interface IBehaviorWithAuth {
+  /**
+   * @description 页面中方法的认证逻辑
+   */
+  operateCertifiedFun: (params?: IsCertifiedParams) => boolean;
+  /**
+   * @description 获取token的方法
+   */
+  getTokenFun: () => any;
+  /**
+   * @description 进入页面后的认证逻辑
+   */
+  pageCertifiedFun?: () => void;
+}
+
 interface NotAuthCallbackFuns {
   /**
    * @description 没有登录的回调
@@ -8,33 +24,6 @@ interface NotAuthCallbackFuns {
    */
   notAccessCallback?: (toLoginFun: () => void) => void;
 }
-interface IBehaviorWithAuth {
-  /**
-   * @description 是否在进入页面的时候判断用户是否登录
-   */
-  isPageNeedLogin?: boolean;
-  /**
-   * @description 页面需要的权限列表，如果传入此参数，并且用户没有权限将自动redict到403页面
-   */
-  accessPageNeed?: string[];
-  /**
-   * @description 登录页面路径
-   */
-  loginPagePath?: string;
-  /**
-   * @description 403页面路径
-   */
-  forbidden403PagePath?: string;
-  /**
-   * @description 跳转登陆页面前提示函数，透传跳转登陆页面方法
-   */
-  defaultNotLoginCallback?: (toLoginFun?: () => void) => void;
-  /**
-   * @description 没有权限的提示函数，透传跳转登陆页面方法
-   */
-  defaultNotAccessCallback?: (toLoginFun?: () => void) => void;
-}
-
 type AuthMethods = AuthItem[] | string[];
 interface AuthItem extends NotAuthCallbackFuns {
   /**
@@ -54,11 +43,6 @@ interface IsCertifiedParams extends NotAuthCallbackFuns {
   accessNeed?: string[];
 }
 
-//以下时暴露给外部的功能的类型
-export interface BehaviorWithAuthInjectData {
-  token?: any;
-  access?: string[];
-}
 export interface BehaviorWithAuthInjectOption {
   /**
    * @description 判断是否有权限
@@ -74,17 +58,8 @@ export interface BehaviorWithAuthInjectOption {
   authMethods?: AuthMethods;
 }
 
-
-
-const BehaviorWithAuth = (params?: IBehaviorWithAuth) => {
-  const {
-    isPageNeedLogin,
-    accessPageNeed,
-    loginPagePath,
-    forbidden403PagePath,
-    defaultNotAccessCallback,
-    defaultNotLoginCallback,
-  } = params ?? {};
+const BehaviorWithAuth = (params: IBehaviorWithAuth) => {
+  const { operateCertifiedFun, pageCertifiedFun, getTokenFun } = params;
 
   return Behavior({
     data: {
@@ -92,21 +67,7 @@ const BehaviorWithAuth = (params?: IBehaviorWithAuth) => {
     },
     pageLifetimes: {
       show() {
-        if (isPageNeedLogin && !this.getToken()) {
-          defaultNotLoginCallback
-            ? defaultNotLoginCallback?.(this._toLoginPage)
-            : this._toLoginPage();
-        }
-        const hasPageAccess = this._hasAccess(accessPageNeed);
-        if (
-          forbidden403PagePath &&
-          this.getToken() &&
-          accessPageNeed &&
-          accessPageNeed.length > 0 &&
-          !hasPageAccess
-        ) {
-          this._to403Page();
-        }
+        pageCertifiedFun?.();
       },
     },
     definitionFilter(defFields: any) {
@@ -141,7 +102,7 @@ const BehaviorWithAuth = (params?: IBehaviorWithAuth) => {
       if (onAuthLoad) {
         const onShow = defFields.methods.onShow;
         defFields.methods.onShow = function () {
-          if (this.getToken() && !this.data._isOnAuthLoadExcute) {
+          if (getTokenFun() && !this.data._isOnAuthLoadExcute) {
             onAuthLoad.call(this);
             this.setData({
               _isOnAuthLoadExcute: true,
@@ -153,78 +114,89 @@ const BehaviorWithAuth = (params?: IBehaviorWithAuth) => {
     },
     methods: {
       isCertified(params?: IsCertifiedParams) {
-        const token = this.getToken();
-        const { accessNeed, notLoginCallback, notAccessCallback } = params ?? {};
-        const hasAccess = this._hasAccess(accessNeed);
-        if (!token) {
-          notLoginCallback
-            ? notLoginCallback?.(this._toLoginPage)
-            : defaultNotLoginCallback?.(this._toLoginPage);
-          return false;
-        }
-        if (accessNeed && accessNeed.length > 0 && !hasAccess) {
-          notAccessCallback
-            ? notAccessCallback?.(this._toLoginPage)
-            : defaultNotAccessCallback?.(this._toLoginPage);
-          return false;
-        }
-        return true;
-      },
-      //token信息（判断是否登录以及获取一些用户信息）
-      getToken() {
-        return wx.getStorageSync("token");
-      },
-      //用户的权限列表
-      getAccess() {
-        return wx.getStorageSync("access");
-      },
-      _hasAccess(accessNeed?: string[]) {
-        const access = this.getAccess();
-        return accessNeed?.every((item) => access?.includes(item));
-      },
-      _toLoginPage() {
-        if (loginPagePath) {
-          wx.navigateTo({ url: loginPagePath });
-        }
-      },
-      _to403Page() {
-        if (forbidden403PagePath) {
-          wx.redirectTo({ url: forbidden403PagePath });
-        }
+        return operateCertifiedFun(params);
       },
     },
   });
 };
 
-export function createNormalAuthBehavior(
-  params?: Pick<IBehaviorWithAuth, "isPageNeedLogin" | "accessPageNeed">
-) {
+const createNormalAuthBehavior = (params?: {
+  isPageNeedLogin: boolean;
+  accessPageNeed: string[];
+}) => {
+  const { isPageNeedLogin, accessPageNeed } = params ?? {};
+
+  const defaultNotLoginCallback = () => {
+    wx.showModal({
+      content: "请登录!",
+      showCancel: false,
+      success(res) {
+        if (res.confirm) {
+          toLoginPage();
+        }
+      },
+    });
+  };
   const tipAuthBehavior = BehaviorWithAuth({
-    isPageNeedLogin: params?.isPageNeedLogin,
-    accessPageNeed: params?.accessPageNeed,
-    loginPagePath: "/pages/login/index",
-    forbidden403PagePath: "/pages/403/index",
-    defaultNotLoginCallback(toLoginFun) {
-      wx.showModal({
-        content: "请登录!",
-        showCancel: false,
-        success(res) {
-          if (res.confirm) {
-            toLoginFun?.();
-          }
-        },
-      });
+    pageCertifiedFun() {
+      const hasPageAccess = hasAccess(accessPageNeed);
+      if (isPageNeedLogin && !getToken()) {
+        defaultNotLoginCallback();
+      }
+      if (
+        getToken() &&
+        accessPageNeed &&
+        accessPageNeed.length > 0 &&
+        !hasPageAccess
+      ) {
+        to403Page();
+      }
     },
-    defaultNotAccessCallback() {
-      wx.showModal({
-        content: "没有访问权限!",
-        showCancel: false,
-        confirmText:'关闭',
-        confirmColor:'#000'
-      });
+    operateCertifiedFun(params?: IsCertifiedParams) {
+      const token = getToken();
+      const { accessNeed, notLoginCallback, notAccessCallback } = params ?? {};
+      const isHasAccess = hasAccess(accessNeed);
+      if (!token) {
+        notLoginCallback
+          ? notLoginCallback?.(toLoginPage)
+          : defaultNotLoginCallback();
+        return false;
+      }
+      if (accessNeed && accessNeed.length > 0 && !isHasAccess) {
+        notAccessCallback
+          ? notAccessCallback?.(toLoginPage)
+          : wx.showModal({
+              content: "没有访问权限!",
+              showCancel: false,
+              confirmText: "关闭",
+              confirmColor: "#000",
+            });
+        return false;
+      }
+      return true;
     },
+    getTokenFun: getToken,
   });
   return tipAuthBehavior;
-}
+};
+
+const getToken = () => {
+  return wx.getStorageSync("token");
+};
+//用户的权限列表
+const getAccess = () => {
+  return wx.getStorageSync("access");
+};
+const toLoginPage = () => {
+  wx.navigateTo({ url: "/pages/login/index" });
+};
+const to403Page = () => {
+  wx.redirectTo({ url: "/pages/403/index" });
+};
+const hasAccess = (accessNeed?: string[]) => {
+  const access = getAccess();
+  return accessNeed?.every((item) => access?.includes(item));
+};
+export { createNormalAuthBehavior, getAccess, getToken, hasAccess };
 
 export default BehaviorWithAuth;

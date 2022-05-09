@@ -31,10 +31,9 @@ Page<IIndexPageData, IIndexPageOption>({
   authMethods: [
     {
       name: "toList",
-      access:'list',
       notLoginCallback(toLoginFun) {
         wx.showModal({
-          content: "请登录!",
+          content: "请登录1!",
           showCancel: false,
           success(res) {
             if (res.confirm) {
