@@ -1,5 +1,8 @@
 <!--index.wxml-->
-<view class="container">
-  <van-button type="primary" bind:click="toList">tolist</van-button>
-  <van-button type="info" bind:click="logout">登出</van-button>
+<view class="">
+  <van-cell-group>
+    <van-cell title="BehaviorWithAuth" value="BehaviorWithAuth例子" is-link bind:click="toAuthPage" />
+    <van-cell title="BehaviorWithList" value="BehaviorWithList例子" is-link bind:click="toList" />
+    <van-cell title="{{loginTitle}}" is-link bind:click="logout" border="{{false}}" />
+  </van-cell-group>
 </view>

@@ -1,9 +1,5 @@
 // pages/list/index.ts
 
-import BehaviorWithAuth, {
-  BehaviorWithAuthInjectOption,
-  createNormalAuthBehavior,
-} from "../../behaviors/BehaviorWithAuth";
 import BehaviorWithList, {
   BehaviorWithListInjectData,
   BehaviorWithListInjectOption,
@@ -20,24 +16,11 @@ const listBehavior = BehaviorWithList({
   },
 });
 
-const auth = createNormalAuthBehavior({
-  accessPageNeed: ["list"],
-  isPageNeedLogin: true,
-});
-
-interface IListPageOption
-  extends BehaviorWithListInjectOption,
-    BehaviorWithAuthInjectOption {}
-
-type IListPageData = {} & { list?: BehaviorWithListInjectData };
-
 Page<IListPageData, IListPageOption>({
-  //@ts-ignore
-  behaviors: [ auth,listBehavior],
+  behaviors: [listBehavior],
   data: {},
-  onLoad() {},
-  onAuthLoad() {
-    this.getListBehavior();
+  onLoad() {
+    this.getListBehavior?.();
   },
 
   onReady() {},
@@ -51,6 +34,14 @@ Page<IListPageData, IListPageOption>({
   onPullDownRefresh() {},
 
   onReachBottom() {
-    this.nextPageBehavior();
+    this.nextPageBehavior?.();
   },
 });
+
+interface IListPageOption extends BehaviorWithListInjectOption {
+  behaviors?: string[];
+}
+
+interface IListPageData {
+  list?: BehaviorWithListInjectData;
+}

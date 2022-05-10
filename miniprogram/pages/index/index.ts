@@ -7,47 +7,101 @@ import {
   BehaviorWithAuthInjectOption,
   createNormalAuthBehavior,
 } from "../../behaviors/BehaviorWithAuth";
+import {
+  toListPage,
+  toLoginPage,
+  toSomeNeedAuthPage,
+} from "../../utils/navigate/toRoutePage";
+import { GlobalData, GlobalOption } from "../../models/global";
+import { UserData, UserOption } from "../../models/user";
 
 const test = BehaviorWithVisible("test");
 const auth = createNormalAuthBehavior();
 
-type IIndexPageData = {};
-
-type IIndexPageOption = {} & BehaviorWithAuthInjectOption;
 Page<IIndexPageData, IIndexPageOption>({
-  //@ts-ignore
   behaviors: [testBehavior, computedBehavior, test, auth],
-  data: {},
+  data: {
+    isLogin: false,
+  },
   watch: {},
   computed: {
-    sum(data: any) {
-      return data.numA + data.numB;
+    loginTitle(data) {
+      return data.isLogin ? "登出" : "登录";
     },
   },
   async onLoad() {
+    console.log("onLoad");
+    console.log(this.data.global?.sum);
+    
     await getSingleImg();
   },
-  onAuthLoad() {},
+  onAuthLoad() {
+    this.data.sum;
+    console.log("onAuthLoad");
+  },
+  onShow() {
+    console.log("onShow");
+    this.setData({
+      isLogin: !!wx.getStorageSync("token"),
+    });
+  },
   authMethods: [
     {
-      name: "toList",
-      notLoginCallback(toLoginFun) {
+      name: "toAuthPage",
+      notLoginCallback() {
+        console.log(this);
         wx.showModal({
-          content: "请登录1!",
-          showCancel: false,
+          content: "请登录!",
           success(res) {
             if (res.confirm) {
-              toLoginFun();
+              toLoginPage();
             }
           },
         });
       },
     },
+    "toList",
   ],
   toList() {
-    wx.navigateTo({ url: "/pages/list/index" });
+    toListPage();
+  },
+  toAuthPage() {
+    toSomeNeedAuthPage();
   },
   logout() {
-    wx.setStorageSync("token", "");
+    if (this.data.isLogin) {
+      wx.setStorageSync("token", "");
+      this.setData(
+        {
+          isLogin: false,
+        },
+        () => {
+          wx.showToast({ title: "登出成功" });
+        }
+      );
+    } else {
+      toLoginPage({
+        success() {
+          console.log(this);
+        },
+      });
+    }
   },
 });
+
+interface IIndexPageData extends Partial<UserData> {
+  isLogin: boolean;
+  loginTitle?: string;
+  global?: Partial<GlobalData>;
+}
+
+interface IIndexPageOption
+  extends BehaviorWithAuthInjectOption,
+    BehaviorWithComputedInjectOption<IIndexPageData>,
+    Partial<UserOption>,
+    Partial<GlobalOption> {
+  toList(): void;
+  toAuthPage(): void;
+  logout(): void;
+  behaviors: string[];
+}

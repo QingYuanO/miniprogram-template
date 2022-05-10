@@ -1,6 +1,17 @@
 import { observable, action } from "mobx-miniprogram";
 
-export const user = observable({
+export interface UserData {
+  numA: number;
+  numB: number;
+  readonly sum: number;
+}
+export interface UserOption {
+  update_user(): void;
+}
+
+interface UserObservable extends UserData, UserOption {}
+
+export const user = observable<UserObservable>({
   numA: 1000,
   numB: 1000,
 

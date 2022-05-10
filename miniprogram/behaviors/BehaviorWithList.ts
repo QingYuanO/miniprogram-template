@@ -51,11 +51,11 @@ export interface BehaviorWithListInjectData {
 }
 
 export interface BehaviorWithListInjectOption {
-  nextPageBehavior: (extraData?: Record<string, any>) => void;
-  getListBehavior: (params?: IGetListParams) => Promise<any>;
-  updateItemBehavior: (data: any) => Promise<any>;
-  addItemBehavior: (data: any) => Promise<any>;
-  deleteItemBehavior: (id: any) => Promise<any>;
+  nextPageBehavior?: (extraData?: Record<string, any>) => void;
+  getListBehavior?: (params?: IGetListParams) => Promise<any>;
+  updateItemBehavior?: (data: any) => Promise<any>;
+  addItemBehavior?: (data: any) => Promise<any>;
+  deleteItemBehavior?: (id: any) => Promise<any>;
 }
 
 /**

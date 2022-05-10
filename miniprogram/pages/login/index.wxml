@@ -1,2 +1,4 @@
 <!--pages/login/index.wxml-->
-<van-button type="default" bind:click="setToken">登录</van-button>
+<view class="container">
+    <van-button type="primary" bind:click="setToken">登录</van-button>
+</view>

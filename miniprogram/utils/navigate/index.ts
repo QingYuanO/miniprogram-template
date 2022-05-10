@@ -9,9 +9,10 @@ export enum NavigateType {
   switchTab = "switchTab",
 }
 
-interface ToRouterType<P> {
+export interface ToRouterType<P=unknown> {
   params?: P;
-  type?: NavigateType /** 接口调用结束的回调函数（调用成功、失败都会执行） */;
+  type?: NavigateType 
+  /** 接口调用结束的回调函数（调用成功、失败都会执行） */;
   complete?: (res: WechatMiniprogram.GeneralCallbackResult) => void;
   /** 页面间通信接口，用于监听被打开页面发送到当前页面的数据。 */
   events?: WechatMiniprogram.IAnyObject;
@@ -38,7 +39,7 @@ const generateParams = (params: { [key: string]: any }) => {
     }, "")
   );
 };
-const navigate = <P>(url: string, option?: ToRouterType<P>) => {
+const navigate = <P=unknown>(url: string, option?: ToRouterType<P>) => {
   const { type, params, success, fail, complete, events } = option ?? {
     type: NavigateType.navigateTo,
     params: {},

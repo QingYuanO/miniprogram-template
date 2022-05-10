@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/list/index",
     "pages/login/index",
-    "pages/403/index"
+    "pages/403/index",
+    "pages/someNeedAuthPage/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -13,6 +14,8 @@
   },
   "sitemapLocation": "sitemap.json",
   "usingComponents": {
-    "van-button": "@vant/weapp/button/index"
+    "van-button": "@vant/weapp/button/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index"
   }
 }

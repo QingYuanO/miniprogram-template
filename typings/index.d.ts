@@ -6,3 +6,9 @@ interface IAppOption {
   }
   userInfoReadyCallback?: WechatMiniprogram.GetUserInfoSuccessCallback,
 }
+
+
+interface BehaviorWithComputedInjectOption<V = unknown>{
+  watch?: Record<string, (...args: any[]) => void>;
+  computed?: Record<string, (data: V) => void>;
+}

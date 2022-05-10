@@ -1,8 +1,17 @@
-import { observable, action, autorun, runInAction } from "mobx-miniprogram";
+import { observable, action } from "mobx-miniprogram";
 
-export type GlobalType = typeof global
+export interface GlobalData {
+  numA: number;
+  numB: number;
+  readonly sum: number;
+}
+export interface GlobalOption {
+  update(): void;
+}
 
-export const global = observable({
+interface GlobalObservable extends GlobalData, GlobalOption {}
+
+export const global = observable<GlobalObservable>({
   numA: 1,
   numB: 2,
 
@@ -15,6 +24,6 @@ export const global = observable({
       const sum = this.sum;
       this.numA = this.numB;
       this.numB = sum;
-    })
+    });
   },
 });
