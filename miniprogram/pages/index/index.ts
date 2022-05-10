@@ -13,7 +13,7 @@ import {
   toSomeNeedAuthPage,
 } from "../../utils/navigate/toRoutePage";
 import { GlobalData, GlobalOption } from "../../models/global";
-import { UserData, UserOption } from "../../models/user";
+import {  UserData, UserOption } from "../../models/user";
 
 const test = BehaviorWithVisible("test");
 const auth = createNormalAuthBehavior();
@@ -28,11 +28,19 @@ Page<IIndexPageData, IIndexPageOption>({
     loginTitle(data) {
       return data.isLogin ? "登出" : "登录";
     },
+    userStore(data) {
+      const { numA, numB, sum } = data;
+      return `${numA}-${numB}-${sum}`;
+    },
+    globalStore(data) {
+      const { numA, numB, sum } = data?.global ?? {};
+      return `${numA}-${numB}-${sum}`;
+    },
   },
   async onLoad() {
     console.log("onLoad");
     console.log(this.data.global?.sum);
-    
+
     await getSingleImg();
   },
   onAuthLoad() {

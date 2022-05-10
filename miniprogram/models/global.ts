@@ -1,4 +1,4 @@
-import { observable, action } from "mobx-miniprogram";
+import { observable, runInAction } from "mobx-miniprogram";
 
 export interface GlobalData {
   numA: number;
@@ -20,7 +20,7 @@ export const global = observable<GlobalObservable>({
   },
 
   update: function () {
-    action(() => {
+    runInAction(() => {
       const sum = this.sum;
       this.numA = this.numB;
       this.numB = sum;
