@@ -1,29 +1,21 @@
-// index.ts
-import { testBehavior } from "./storeBehavior";
+import { indexAuth, testBehavior, testVisible } from "./behavior";
 import { behavior as computedBehavior } from "miniprogram-computed";
 import { getSingleImg } from "../../service/api/img";
-import BehaviorWithVisible from "../../behaviors/BehaviorWithVisible";
-import {
-  BehaviorWithAuthInjectOption,
-  createNormalAuthBehavior,
-} from "../../behaviors/BehaviorWithAuth";
+import { BehaviorWithAuthInjectOption } from "../../behaviors/BehaviorWithAuth";
 import {
   toListPage,
   toLoginPage,
   toSomeNeedAuthPage,
 } from "../../utils/navigate/toRoutePage";
 import { GlobalData, GlobalOption } from "../../models/global";
-import {  UserData, UserOption } from "../../models/user";
-
-const test = BehaviorWithVisible("test");
-const auth = createNormalAuthBehavior();
+import { UserData, UserOption } from "../../models/user";
 
 Page<IIndexPageData, IIndexPageOption>({
-  behaviors: [testBehavior, computedBehavior, test, auth],
+  behaviors: [testBehavior, computedBehavior, testVisible, indexAuth],
   data: {
     isLogin: false,
   },
-  watch: {},
+  // watch: {},
   computed: {
     loginTitle(data) {
       return data.isLogin ? "登出" : "登录";
@@ -38,9 +30,6 @@ Page<IIndexPageData, IIndexPageOption>({
     },
   },
   async onLoad() {
-    console.log("onLoad");
-    console.log(this.data.global?.sum);
-
     await getSingleImg();
   },
   onAuthLoad() {

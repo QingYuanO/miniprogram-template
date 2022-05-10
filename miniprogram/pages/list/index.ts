@@ -1,21 +1,12 @@
 // pages/list/index.ts
-
-import { BehaviorWithStore } from "mobx-miniprogram-bindings";
 import BehaviorWithList, {
   BehaviorWithListInjectData,
   BehaviorWithListInjectOption,
 } from "../../behaviors/BehaviorWithList";
-import { global } from "../../models";
 import { GlobalData } from "../../models/global";
+import { globalStore } from "./behavior";
 
-const globalBehavior = BehaviorWithStore({
-  storeBindings: [{
-    namespace: "global",
-    store: global,
-    fields: ["numA", "numB", "sum"],
-    actions: ["update"],
-  }],
-});
+
 
 const listBehavior = BehaviorWithList({
   namespace: "list",
@@ -29,13 +20,13 @@ const listBehavior = BehaviorWithList({
 });
 
 Page<IListPageData, IListPageOption>({
-  behaviors: [globalBehavior,listBehavior],
+  behaviors: [globalStore,listBehavior],
   data: {},
   onLoad() {
 		const { numA, numB, sum } = this.data?.global ?? {};
+		wx.setNavigationBarTitle({title:`${numA}-${numB}-${sum}`})
       
 		this.getListBehavior?.();
-		wx.setNavigationBarTitle({title:`${numA}-${numB}-${sum}`})
   },
 
   onReady() {},

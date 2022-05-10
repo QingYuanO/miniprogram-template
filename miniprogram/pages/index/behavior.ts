@@ -1,4 +1,6 @@
 import { BehaviorWithStore } from "mobx-miniprogram-bindings";
+import { createNormalAuthBehavior } from "../../behaviors/BehaviorWithAuth";
+import BehaviorWithVisible from "../../behaviors/BehaviorWithVisible";
 import { global, user } from "../../models/index";
 
 export const testBehavior = BehaviorWithStore({
@@ -13,3 +15,7 @@ export const testBehavior = BehaviorWithStore({
     actions: ["update_user"],
   },]
 });
+
+
+export const testVisible = BehaviorWithVisible("test");
+export const indexAuth = createNormalAuthBehavior();
