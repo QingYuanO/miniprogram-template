@@ -1,5 +1,9 @@
 import navigate, { ToRouterType } from "./index";
 
+export const toIndexPage = (option?: ToRouterType) => {
+  navigate("/pages/index/index", option);
+};
+
 export const toLoginPage = (option?: ToRouterType) => {
   navigate("/pages/login/index", option);
 };

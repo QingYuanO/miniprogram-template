@@ -9,21 +9,17 @@ export enum NavigateType {
   switchTab = "switchTab",
 }
 
-export interface ToRouterType<P=unknown> {
+export interface ToRouterType<P = unknown> {
   params?: P;
-  type?: NavigateType 
-  /** 接口调用结束的回调函数（调用成功、失败都会执行） */;
+  type?: NavigateType;
+  /** 接口调用结束的回调函数（调用成功、失败都会执行） */
   complete?: (res: WechatMiniprogram.GeneralCallbackResult) => void;
   /** 页面间通信接口，用于监听被打开页面发送到当前页面的数据。 */
   events?: WechatMiniprogram.IAnyObject;
   /** 接口调用失败的回调函数 */
   fail?: (res: WechatMiniprogram.GeneralCallbackResult) => void;
   /** 接口调用成功的回调函数 */
-  success?: (
-    res:
-      | WechatMiniprogram.NavigateToSuccessCallbackResult
-      | WechatMiniprogram.GeneralCallbackResult
-  ) => void;
+  success?: (res: WechatMiniprogram.NavigateToSuccessCallbackResult) => void;
 }
 
 const generateParams = (params: { [key: string]: any }) => {
@@ -39,27 +35,23 @@ const generateParams = (params: { [key: string]: any }) => {
     }, "")
   );
 };
-const navigate = <P=unknown>(url: string, option?: ToRouterType<P>) => {
-  const { type, params, success, fail, complete, events } = option ?? {
-    type: NavigateType.navigateTo,
-    params: {},
-    success: () => {},
-    fail: () => {},
-    complete: () => {},
-    events: undefined,
-  };
+const navigate = <P = unknown>(url: string, option?: ToRouterType<P>) => {
+  const { type, params, success, fail, complete, events } = option ?? {};
   url = url + generateParams(params ?? {});
   switch (type) {
     case NavigateType.navigateTo:
       wx.navigateTo({ url, success, fail, complete, events });
       break;
     case NavigateType.redirectTo:
+      //@ts-ignore
       wx.redirectTo({ url, success, fail, complete });
       break;
     case NavigateType.reLaunch:
+      //@ts-ignore
       wx.reLaunch({ url, success, fail, complete });
       break;
     case NavigateType.switchTab:
+      //@ts-ignore
       wx.switchTab({ url, success, fail, complete });
       break;
     default:
@@ -67,5 +59,4 @@ const navigate = <P=unknown>(url: string, option?: ToRouterType<P>) => {
   }
 };
 
-
-export default navigate
+export default navigate;

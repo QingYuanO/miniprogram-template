@@ -78,7 +78,8 @@ Page<IIndexPageData, IIndexPageOption>({
       );
     } else {
       toLoginPage({
-        success() {
+        success:(res) => {
+          res.eventChannel
           console.log(this);
         },
       });
