@@ -28,6 +28,9 @@ Page<IIndexPageData, IIndexPageOption>({
       const { numA, numB, sum } = data?.global ?? {};
       return `${numA}-${numB}-${sum}`;
     },
+    testVisibleStr(data){
+      return data?.testVisible?.toString()
+    }
   },
   async onLoad() {
     await getSingleImg();
@@ -89,6 +92,7 @@ Page<IIndexPageData, IIndexPageOption>({
 
 interface IIndexPageData extends Partial<UserData> {
   isLogin: boolean;
+  testVisible?: boolean;
   loginTitle?: string;
   global?: Partial<GlobalData>;
 }
