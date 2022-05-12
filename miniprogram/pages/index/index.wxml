@@ -8,4 +8,8 @@
     <van-cell title="globalStore" value="{{globalStore}}" is-link bind:click="update" />
     <van-cell title="{{loginTitle}}" is-link bind:click="logout" border="{{false}}" />
   </van-cell-group>
+
+  <show when="{{testVisible}}">
+    a
+  </show>
 </view>

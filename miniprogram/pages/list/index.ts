@@ -6,27 +6,32 @@ import BehaviorWithList, {
 import { GlobalData } from "../../models/global";
 import { globalStore } from "./behavior";
 
-
-
 const listBehavior = BehaviorWithList({
   namespace: "list",
+  isAutoNextPage: true,
+  isAutoLoad: true,
   getListApi: () => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve({ listData: new Array(10).fill(1), total: 8, isLast: false });
+        resolve({
+          status: "ok",
+          listData: new Array(10).fill(1),
+          total: 8,
+          isLast: false,
+        });
       }, 1000);
     });
   },
 });
 
 Page<IListPageData, IListPageOption>({
-  behaviors: [globalStore,listBehavior],
+  behaviors: [globalStore, listBehavior],
   data: {},
   onLoad() {
-		const { numA, numB, sum } = this.data?.global ?? {};
-		wx.setNavigationBarTitle({title:`${numA}-${numB}-${sum}`})
-      
-		this.getListBehavior?.();
+    const { numA, numB, sum } = this.data?.global ?? {};
+    wx.setNavigationBarTitle({ title: `${numA}-${numB}-${sum}` });
+
+    // this.getListBehavior?.();
   },
 
   onReady() {},
@@ -39,16 +44,14 @@ Page<IListPageData, IListPageOption>({
 
   onPullDownRefresh() {},
 
-  onReachBottom() {
-    this.nextPageBehavior?.();
-  },
+  onReachBottom() {},
 });
 
 interface IListPageOption extends BehaviorWithListInjectOption {
   behaviors?: string[];
 }
 
-interface IListPageData    {
-	list?: BehaviorWithListInjectData;
-	global?:Partial<GlobalData>
+interface IListPageData {
+  list?: BehaviorWithListInjectData;
+  global?: Partial<GlobalData>;
 }

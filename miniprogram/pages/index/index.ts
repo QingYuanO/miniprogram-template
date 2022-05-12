@@ -11,7 +11,7 @@ import { GlobalData, GlobalOption } from "../../models/global";
 import { UserData, UserOption } from "../../models/user";
 
 Page<IIndexPageData, IIndexPageOption>({
-  behaviors: [testBehavior, computedBehavior, testVisible, indexAuth],
+  behaviors: [testBehavior, testVisible, computedBehavior, indexAuth],
   data: {
     isLogin: false,
   },
@@ -28,9 +28,9 @@ Page<IIndexPageData, IIndexPageOption>({
       const { numA, numB, sum } = data?.global ?? {};
       return `${numA}-${numB}-${sum}`;
     },
-    testVisibleStr(data){
-      return data?.testVisible?.toString()
-    }
+    testVisibleStr(data) {
+      return data?.testVisible?.toString();
+    },
   },
   async onLoad() {
     await getSingleImg();
@@ -81,8 +81,8 @@ Page<IIndexPageData, IIndexPageOption>({
       );
     } else {
       toLoginPage({
-        success:(res) => {
-          res.eventChannel
+        success: (res) => {
+          res.eventChannel;
           console.log(this);
         },
       });

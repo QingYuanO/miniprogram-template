@@ -1,0 +1,6 @@
+<view wx:if="{{isShowChildrenLoad}}" style="display: {{when ?'block':'none'}};">
+  <slot></slot>
+</view>
+<view wx:if="{{isHideChildrenLoad}}" style="display: {{!when ?'block':'none'}};">
+  <slot name="fallback"></slot>
+</view>
