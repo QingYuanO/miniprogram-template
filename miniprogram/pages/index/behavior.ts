@@ -17,5 +17,5 @@ export const testBehavior = BehaviorWithStore({
 });
 
 
-export const testVisible = BehaviorWithVisible("test",true);
+export const testVisible = BehaviorWithVisible("test");
 export const indexAuth = createNormalAuthBehavior();

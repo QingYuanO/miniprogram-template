@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="">
+<view class="" >
   <van-cell-group>
     <van-cell title="BehaviorWithAuth" value="BehaviorWithAuth例子" is-link bind:click="toAuthPage" />
     <van-cell title="BehaviorWithList" value="BehaviorWithList例子" is-link bind:click="toList" />
@@ -12,4 +12,5 @@
   <show when="{{testVisible}}">
     a
   </show>
+	<custom-tab-bar />
 </view>

@@ -1,12 +1,12 @@
-import { indexAuth, testBehavior, testVisible } from "./behavior";
 import { behavior as computedBehavior } from "miniprogram-computed";
+import { indexAuth, testBehavior, testVisible } from "./behavior";
 import { getSingleImg } from "../../service/api/img";
 import { BehaviorWithAuthInjectOption } from "../../behaviors/BehaviorWithAuth";
 import {
   toListPage,
   toLoginPage,
   toSomeNeedAuthPage,
-} from "../../utils/navigate/toRoutePage";
+} from "../../utils/toRoutePage";
 import { GlobalData, GlobalOption } from "../../models/global";
 import { UserData, UserOption } from "../../models/user";
 
@@ -33,7 +33,7 @@ Page<IIndexPageData, IIndexPageOption>({
     },
   },
   async onLoad() {
-    await getSingleImg();
+		await getSingleImg();
   },
   onAuthLoad() {
     this.data.sum;

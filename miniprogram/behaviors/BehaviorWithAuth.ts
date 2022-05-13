@@ -1,4 +1,6 @@
-import { to403Page, toLoginPage } from "../utils/navigate/toRoutePage";
+
+
+import { NavigateType, to403Page, toLoginPage } from "../utils/toRoutePage";
 
 interface IBehaviorWithAuth {
   /**
@@ -162,7 +164,7 @@ const createNormalAuthBehavior = (params?: {
         accessPageNeed.length > 0 &&
         !hasPageAccess
       ) {
-        to403Page();
+        to403Page({type:NavigateType.redirectTo});
       }
     },
     operateCertifiedFun(params?: IsCertifiedParams) {

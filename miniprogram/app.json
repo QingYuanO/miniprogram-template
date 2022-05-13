@@ -17,6 +17,8 @@
     "van-button": "@vant/weapp/button/index",
     "van-cell": "@vant/weapp/cell/index",
     "van-cell-group": "@vant/weapp/cell-group/index",
-    "show": "./components/Show/index"
-  }
+    "show": "./components/Show/index",
+    "custom-tab-bar": "./components/CustomTabBar/index"
+  },
+  "lazyCodeLoading": "requiredComponents"
 }

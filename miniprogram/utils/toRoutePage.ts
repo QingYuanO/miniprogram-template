@@ -59,4 +59,23 @@ const navigate = <P = unknown>(url: string, option?: ToRouterType<P>) => {
   }
 };
 
-export default navigate;
+export default navigate
+
+export const toIndexPage = (option?: ToRouterType) => {
+  navigate("/pages/index/index", option);
+};
+
+export const toLoginPage = (option?: ToRouterType) => {
+  navigate("/pages/login/index", option);
+};
+
+export const toListPage = (option?: ToRouterType) => {
+  navigate("/pages/list/index", option);
+};
+
+export const toSomeNeedAuthPage = (option?: ToRouterType) => {
+  navigate("/pages/someNeedAuthPage/index", option);
+};
+export const to403Page = (option?: ToRouterType) => {
+  navigate("/pages/403/index", option);
+};
