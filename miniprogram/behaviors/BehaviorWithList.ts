@@ -1,5 +1,3 @@
-import { BehaviorWithComputed } from "miniprogram-computed";
-
 type ListApiStatus = "ok" | "fail";
 interface IListResult {
   listData?: any[];
@@ -12,9 +10,9 @@ interface IListOperationResult {
   data?: any;
 }
 interface IGetListParams {
-  pageSize?: number;
+  pageSize: number;
   pageNum: number;
-  type?: GetListType;
+  type: GetListType;
   [key: string]: any;
 }
 /**
@@ -27,6 +25,10 @@ interface IBehaviorWithList {
    * @description 注入data的名称
    */
   namespace: string;
+  /**
+   * @description 默认每页数量
+   */
+  defaultPageSize?: number;
   /**
    * @description 每项数据的唯一标识，默认【id】
    */
@@ -42,9 +44,9 @@ interface IBehaviorWithList {
   /**
    * @description 获取列表数据的接口，调用成功时必须返回{isLast:boolean,listData:array,total:number}
    */
-  getListApi: (params: IGetListParams) => Promise<IListResult>;
+  getListApi: (params: Omit<IGetListParams, "type">) => Promise<IListResult>;
   /**
-   * @description 新增数据的接口 
+   * @description 新增数据的接口
    */
   addItemApi?: (data: any) => Promise<IListOperationResult>;
   /**
@@ -71,6 +73,7 @@ export interface BehaviorWithListInjectOption {
    * @description 下一页操作
    */
   nextPageBehavior?: (extraData?: Record<string, any>) => void;
+  onSearchBehavior?: (searchData: Record<string, any>) => void;
   /**
    * @description 获取列表数据的方法
    */
@@ -87,6 +90,8 @@ export interface BehaviorWithListInjectOption {
    * @description 删除列表数据的方法
    */
   deleteItemBehavior?: (id: any) => Promise<any>;
+  //获取列表需要的额外的page data
+  listExtraData?: string[];
 }
 
 /**
@@ -94,42 +99,68 @@ export interface BehaviorWithListInjectOption {
  * @description 注入列表的增、删、改、查逻辑的behavior
  */
 const BehaviorWithList = (params: IBehaviorWithList) => {
-  const key = params.key ?? "id";
   const {
+    key = "id",
     namespace,
     isAutoNextPage,
     isAutoLoad,
+    defaultPageSize = 10,
     getListApi,
     deleteItemApi,
     updateItemApi,
     addItemApi,
   } = params;
-  return BehaviorWithComputed({
-    definitionFilter(defFields) {
+  return Behavior({
+    definitionFilter(defFields: any) {
       const onReachBottom = defFields?.methods?.onReachBottom;
       const onLoad = defFields?.methods?.onLoad;
+
+      const getListExtraData = (pageData: Record<string, any>) => {
+        const listExtraData = defFields?.listExtraData as string[];
+        if (listExtraData && listExtraData.length > 0) {
+          return Object.entries(pageData).reduce(
+            (total: Record<string, any>, [key, val]) => {
+              if (listExtraData.includes(key)) {
+                total[key] = val;
+              }
+              return total;
+            },
+            {}
+          );
+        }
+        return {};
+      };
       if (isAutoNextPage && defFields.methods) {
         defFields.methods.onReachBottom = function () {
-          this.nextPageBehavior();
+          this.nextPageBehavior({ ...getListExtraData(this.data) });
           onReachBottom && onReachBottom.call(this);
         };
       }
       if (isAutoLoad && defFields.methods) {
-        defFields.methods.onLoad = function () {
-          this.getListBehavior();
-          onLoad && onLoad.call(this);
+        defFields.methods.onLoad = async function () {
+          onLoad && (await onLoad.call(this));
+          wx.nextTick(() => {
+            //onLoad中如果想要注入listExtraData中定义的data，并保持和页面一致，页面中的onLoad必须为async方法，内部保持同步的方式写代码
+            this.getListBehavior({
+              pageNum: 1,
+              pageSize: defaultPageSize,
+              type: "initail",
+              ...getListExtraData(this.data),
+            });
+          });
         };
       }
     },
     data: {
       [namespace]: {
-        pageSize: 10,
+        pageSize: defaultPageSize ?? 10,
         pageNum: 1,
         listData: [],
         total: 0,
         isLast: false,
         isFetch: false,
       },
+      _searchData: {},
     },
     methods: {
       /**
@@ -147,6 +178,18 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
           });
         }
       },
+      onSearchBehavior(searchData: Record<string, any> = {}) {
+        const { pageSize } = this.data[namespace];
+        this.getListBehavior({
+          pageNum: 1,
+          pageSize,
+          type: "initial",
+          ...searchData,
+        });
+        this.setData({
+          _searchData: searchData,
+        });
+      },
       /**
        * @description 获取列表数据
        * @param params  pageSize?: number; pageNum: number; type?: 'initial' | 'loadMore', ...otherParams
@@ -155,7 +198,7 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
         const { listData, isFetch } = this.data[namespace];
         const { pageNum, pageSize, type, ...extraData } = params ?? {
           type: "initial",
-          pageSize: 10,
+          pageSize: defaultPageSize,
           pageNum: 1,
         };
         if (!isFetch) {
@@ -167,6 +210,7 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
               pageNum,
               pageSize,
               ...extraData,
+              ...this.data._searchData,
             });
             if (status === "ok") {
               if (

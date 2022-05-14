@@ -66,9 +66,6 @@ const ApiService = {
       showErrorToast = false,
     } = extraData;
     const token = wx.getStorageSync("token");
-    if (hasToken && !token) {
-      return;
-    }
     const contentType = ["POST", "PUT"].includes(method ?? "")
       ? "application/json"
       : "application/x-www-form-urlencoded";
