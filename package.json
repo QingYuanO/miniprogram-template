@@ -2,11 +2,7 @@
   "name": "miniprogram-ts-less-quickstart",
   "version": "1.0.0",
   "description": "",
-  "scripts": {
-    "build:css": "npm run generate:css -- --minify",
-    "dev:css": "npm run generate:css -- --watch",
-    "generate:css": "npx tailwindcss -i ./tailwind.less -o ./miniprogram/style/tailwind.less"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "",
@@ -18,8 +14,6 @@
     "mobx-miniprogram-bindings": "^2.1.5"
   },
   "devDependencies": {
-    "miniprogram-api-typings": "^3.4.6",
-    "tailwindcss": "^3.0.24",
-    "tailwindcss-miniprogram-preset": "^2.1.2"
+    "miniprogram-api-typings": "^3.4.6"
   }
 }
