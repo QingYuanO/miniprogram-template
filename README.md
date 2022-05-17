@@ -1,1 +1,1 @@
-简易模板
+- 启动tailwind，在控制台执行`npm run dev:css`
