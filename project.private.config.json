@@ -12,6 +12,13 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/someNeedAuthPage/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

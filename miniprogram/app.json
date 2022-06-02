@@ -19,5 +19,13 @@
     "van-cell-group": "@vant/weapp/cell-group/index",
     "show": "./components/Show/index"
   },
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "resolveAlias": {
+    "@utils/*": "utils/*",
+    "@components/*": "components/*",
+    "@behaviors/*": "behaviors/*",
+    "@service/*": "service/*",
+    "@pages/*": "pages/*",
+    "@models/*": "models/*"
+  }
 }

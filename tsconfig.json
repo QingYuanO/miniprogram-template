@@ -17,17 +17,19 @@
     "strict": true,
     "strictPropertyInitialization": true,
     "lib": ["ES2020"],
-    "typeRoots": [
-      "./typings"
-    ],
+    "typeRoots": ["./typings"],
     "paths": {
-      "@vant/weapp/*": ["./node_modules/@vant/weapp/*"],
-    },
+      "@vant/weapp/*": ["./node_modules/@vant/weapp/*"]
+    }
   },
-  "include": [
-    "./**/*.ts"
-, "miniprogram/models/global.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["./**/*.ts", "miniprogram/models/global.js"],
+  "exclude": ["node_modules"],
+  "paths": {
+    "@/components/*": ["./miniprogram/components/*"],
+    "@/utils/*": ["./miniprogram/utils/*"],
+    "@/service/*": ["./miniprogram/service/*"],
+    "@/pages/*": ["./miniprogram/pages/*"],
+    "@/behaviors/*": ["./miniprogram/behaviors/*"],
+    "@/models/*": ["./miniprogram/models/*"],
+  }
 }

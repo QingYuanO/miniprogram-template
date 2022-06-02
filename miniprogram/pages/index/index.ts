@@ -1,14 +1,9 @@
 import { behavior as computedBehavior } from "miniprogram-computed";
 import { indexAuth, testBehavior, testVisible } from "./behavior";
-import { getSingleImg } from "../../service/api/img";
-import { BehaviorWithAuthInjectOption } from "../../behaviors/BehaviorWithAuth";
-import {
-  toListPage,
-  toLoginPage,
-  toSomeNeedAuthPage,
-} from "../../utils/toRoutePage";
-import { GlobalData, GlobalOption } from "../../models/global";
-import { UserData, UserOption } from "../../models/user";
+import { BehaviorWithAuthInjectOption } from "@behaviors/BehaviorWithAuth";
+import { GlobalData, GlobalOption } from "@models/global";
+import { UserData, UserOption } from "@models/user";
+import { toListPage, toLoginPage, toSomeNeedAuthPage } from "@utils/toRoutePage";
 
 Page<IIndexPageData, IIndexPageOption>({
   behaviors: [testBehavior, testVisible, computedBehavior, indexAuth],

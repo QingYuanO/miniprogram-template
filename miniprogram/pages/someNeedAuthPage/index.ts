@@ -1,7 +1,7 @@
 import {
   BehaviorWithAuthInjectOption,
   createNormalAuthBehavior,
-} from "../../behaviors/BehaviorWithAuth";
+} from "@behaviors/BehaviorWithAuth";
 const auth = createNormalAuthBehavior({
   accessPageNeed: ["auth1"],
   isPageNeedLogin: true,
