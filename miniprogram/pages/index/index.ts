@@ -33,7 +33,7 @@ Page<IIndexPageData, IIndexPageOption>({
     },
   },
   async onLoad() {
-		// await getSingleImg();
+    // await getSingleImg();
   },
   onAuthLoad() {
     this.data.sum;
