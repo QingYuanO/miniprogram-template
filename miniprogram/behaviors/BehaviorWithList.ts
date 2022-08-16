@@ -3,10 +3,10 @@ interface IListResult {
   listData?: any[];
   total?: number;
   isLast?: boolean;
-  status: ListApiStatus;
+  // status: ListApiStatus;
 }
 interface IListOperationResult {
-  status: ListApiStatus;
+  // status: ListApiStatus;
   data?: any;
 }
 interface IGetListParams {
@@ -60,10 +60,10 @@ interface IBehaviorWithList {
   deleteItemApi?: (id: any) => Promise<IListOperationResult>;
 }
 
-export interface BehaviorWithListInjectData {
+export interface BehaviorWithListInjectData<L = unknown> {
   pageSize?: number;
   pageNum?: number;
-  listData?: any[];
+  listData?: L[];
   total?: number;
   isLast?: boolean;
 }
@@ -206,45 +206,40 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
             [namespace]: { ...this.data[namespace], isFetch: true },
           });
           try {
-            const { status, ...data } = await getListApi({
+            const { ...data } = await getListApi({
               pageNum,
               pageSize,
               ...extraData,
               ...this.data._searchData,
             });
-            if (status === "ok") {
-              if (
-                typeof data.isLast !== "boolean" ||
-                !(data.listData instanceof Array) ||
-                typeof data.total !== "number"
-              ) {
-                throw new Error(
-                  "请在【getListApi】返回成功的情况下返回{isLast:boolean,listData:array,total:number}数据"
-                );
-              }
-              const updateData = {
-                ...this.data[namespace],
-                ...(data ?? {}),
-                isFetch: false,
-                pageNum,
-                pageSize,
-              };
-              if (type === "initial") {
-                this.setData({
-                  [namespace]: updateData,
-                });
-              } else {
-                this.setData({
-                  [namespace]: {
-                    ...updateData,
-                    listData: listData.concat(data.listData),
-                  },
-                });
-              }
-            } else {
+
+            if (
+              typeof data.isLast !== "boolean" ||
+              !(data.listData instanceof Array) ||
+              typeof data.total !== "number"
+            ) {
               throw new Error(
-                "接口调用失败【getListApi】- 没传status值或者status值为fail"
+                "请在【getListApi】返回成功的情况下返回{isLast:boolean,listData:array,total:number}数据"
               );
+            }
+            const updateData = {
+              ...this.data[namespace],
+              ...(data ?? {}),
+              isFetch: false,
+              pageNum,
+              pageSize,
+            };
+            if (type === "initial") {
+              this.setData({
+                [namespace]: updateData,
+              });
+            } else {
+              this.setData({
+                [namespace]: {
+                  ...updateData,
+                  listData: listData.concat(data.listData),
+                },
+              });
             }
           } catch (error) {
             console.log(error);
@@ -260,25 +255,20 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
         const { listData } = this.data[namespace];
         try {
           const res = await updateItemApi?.(data);
-          if (res?.status === "ok") {
-            const updateIdx = listData.findIndex(
-              (item: any) => item[key] === data[key]
-            );
-            if (updateIdx !== -1) {
-              listData[updateIdx] = { ...listData[updateIdx], data };
-              this.setData({
-                [namespace]: {
-                  ...this.data[namespace],
-                  listData: [...listData],
-                },
-              });
-            }
-            return res?.data;
-          } else {
-            throw new Error(
-              "接口调用失败【updateItemBehavior】- 没传status值或者status值为fail"
-            );
+
+          const updateIdx = listData.findIndex(
+            (item: any) => item[key] === data[key]
+          );
+          if (updateIdx !== -1) {
+            listData[updateIdx] = { ...listData[updateIdx], data };
+            this.setData({
+              [namespace]: {
+                ...this.data[namespace],
+                listData: [...listData],
+              },
+            });
           }
+          return res?.data;
         } catch (error) {
           console.log(error);
           throw new Error(error);
@@ -291,14 +281,9 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
       async addItemBehavior(data: any) {
         try {
           const res = await addItemApi?.(data);
-          if (res?.status === "ok") {
-            this.getListBehavior();
-            return res?.data;
-          } else {
-            throw new Error(
-              "接口调用失败【addItemBehavior】- 没传status值或者status值为failr"
-            );
-          }
+
+          this.getListBehavior();
+          return res?.data;
         } catch (error) {
           console.log(error);
           throw new Error(error);
@@ -312,39 +297,29 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
         const { listData, pageSize, pageNum, isLast } = this.data[namespace];
         try {
           const res = await deleteItemApi?.(id);
-          if (res?.status === "ok") {
-            const deleteIdx = listData.findIndex(
-              (item: any) => item[key] === id
-            );
-            if (deleteIdx !== -1) {
-              //删除本地数据
-              listData.splice(deleteIdx, 1);
-              if (!isLast) {
-                //如果不是最后一页，将会请求当前页的最后一条数据补齐列表，保证页码准确
-                const {
-                  total,
-                  status,
-                  isLast,
-                  listData: newListData,
-                } = await getListApi({
+
+          const deleteIdx = listData.findIndex((item: any) => item[key] === id);
+          if (deleteIdx !== -1) {
+            //删除本地数据
+            listData.splice(deleteIdx, 1);
+            if (!isLast) {
+              //如果不是最后一页，将会请求当前页的最后一条数据补齐列表，保证页码准确
+              const { total, isLast, listData: newListData } = await getListApi(
+                {
                   pageSize: 1,
                   pageNum: pageNum * pageSize,
-                });
-                if (status === "ok" && newListData?.[0]) {
-                  listData.push(newListData[0]);
-                  this.setData({
-                    [namespace]: {
-                      ...this.data[namespace],
-                      listData: [...listData],
-                      total,
-                      isLast,
-                    },
-                  });
-                } else {
-                  throw new Error(
-                    "接口调用失败【getListApi】- 没传status值或者status值为fail"
-                  );
                 }
+              );
+              if (newListData?.[0]) {
+                listData.push(newListData[0]);
+                this.setData({
+                  [namespace]: {
+                    ...this.data[namespace],
+                    listData: [...listData],
+                    total,
+                    isLast,
+                  },
+                });
               } else {
                 this.setData({
                   [namespace]: {
@@ -353,13 +328,16 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
                   },
                 });
               }
+            } else {
+              this.setData({
+                [namespace]: {
+                  ...this.data[namespace],
+                  listData: [...listData],
+                },
+              });
             }
-            return res?.data;
-          } else {
-            throw new Error(
-              "接口调用失败【deleteItemBehavior】- 没传status值或者status值为fail"
-            );
           }
+          return res?.data;
         } catch (error) {
           console.log(error);
           throw new Error(error);

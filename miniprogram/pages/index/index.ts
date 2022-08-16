@@ -3,7 +3,12 @@ import { indexAuth, testBehavior, testVisible } from "./behavior";
 import { BehaviorWithAuthInjectOption } from "@behaviors/BehaviorWithAuth";
 import { GlobalData, GlobalOption } from "@models/global";
 import { UserData, UserOption } from "@models/user";
-import { toListPage, toLoginPage, toSomeNeedAuthPage } from "@utils/toRoutePage";
+import {
+  toListPage,
+  toLoginPage,
+  toSomeNeedAuthPage,
+} from "@utils/toRoutePage";
+import { BehaviorWithVisibleInjetOption } from "@behaviors/BehaviorWithVisible";
 
 Page<IIndexPageData, IIndexPageOption>({
   behaviors: [testBehavior, testVisible, computedBehavior, indexAuth],
@@ -28,7 +33,7 @@ Page<IIndexPageData, IIndexPageOption>({
     },
   },
   async onLoad() {
-		// await getSingleImg();
+    // await getSingleImg();
   },
   onAuthLoad() {
     this.data.sum;
@@ -95,6 +100,7 @@ interface IIndexPageData extends Partial<UserData> {
 interface IIndexPageOption
   extends BehaviorWithAuthInjectOption,
     BehaviorWithComputedInjectOption<IIndexPageData>,
+    BehaviorWithVisibleInjetOption<"test">,
     Partial<UserOption>,
     Partial<GlobalOption> {
   toList(): void;

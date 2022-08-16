@@ -1,4 +1,14 @@
 type CallbackType = () => void;
+
+interface Option{
+  toggle?:(cb?:CallbackType) => void
+  show?:(cb?:CallbackType) => void
+  hide?:(cb?:CallbackType) => void
+}
+
+/** N 命名空间 */
+export type BehaviorWithVisibleInjetOption<N extends string> = AddNamespace<N ,Option>
+
 const BehaviorWithVisible = (prefix: string, initValue: boolean = false) => {
   const visibleStr = `${prefix}Visible`;
   return Behavior({

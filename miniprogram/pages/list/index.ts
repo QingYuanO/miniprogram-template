@@ -17,7 +17,6 @@ const listBehavior = BehaviorWithList({
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
-          status: "ok",
           listData: new Array(10).fill(1),
           total: 8,
           isLast: false,
