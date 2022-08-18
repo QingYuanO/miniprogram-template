@@ -158,7 +158,8 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
         listData: [],
         total: 0,
         isLast: false,
-        isFetch: false,
+        isFetchNext: false,
+        isFetchInit: false,
       },
       _searchData: {},
     },
@@ -168,8 +169,8 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
        * @param extraData Record<string, any>【将会被注入到获取列表数据的接口参数中】
        */
       nextPageBehavior(extraData?: Record<string, any>) {
-        const { pageNum, pageSize, isFetch, isLast } = this.data[namespace];
-        if (!isLast && !isFetch) {
+        const { pageNum, pageSize, isFetchNext, isLast } = this.data[namespace];
+        if (!isLast && !isFetchNext) {
           this.getListBehavior({
             ...extraData,
             pageNum: pageNum + 1,
@@ -195,18 +196,26 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
        * @param params  pageSize?: number; pageNum: number; type?: 'initial' | 'loadMore', ...otherParams
        */
       async getListBehavior(params?: IGetListParams) {
-        const { listData, isFetch } = this.data[namespace];
+        const { listData, isFetchNext, isFetchInit } = this.data[namespace];
         const { pageNum, pageSize, type, ...extraData } = params ?? {
           type: "initial",
           pageSize: defaultPageSize,
           pageNum: 1,
         };
-        if (!isFetch) {
-          this.setData({
-            [namespace]: { ...this.data[namespace], isFetch: true },
-          });
+        if (!isFetchNext && !isFetchInit) {
+          if (type === "initial") {
+            this.setData({
+              [namespace]: { ...this.data[namespace], isFetchInit: true },
+            });
+          }
+          if (type === "loadMore") {
+            this.setData({
+              [namespace]: { ...this.data[namespace], isFetchNext: true },
+            });
+          }
+
           try {
-            const { ...data } = await getListApi({
+            const data = await getListApi({
               pageNum,
               pageSize,
               ...extraData,
@@ -225,7 +234,8 @@ const BehaviorWithList = (params: IBehaviorWithList) => {
             const updateData = {
               ...this.data[namespace],
               ...(data ?? {}),
-              isFetch: false,
+              isFetchNext: false,
+              isFetchInit: false,
               pageNum,
               pageSize,
             };
