@@ -2,7 +2,10 @@
   "name": "miniprogram-ts-less-quickstart",
   "version": "1.0.0",
   "description": "",
-  "scripts": {},
+  "scripts": {
+    "unocss": "unocss miniprogram/pages/**/*.wxml -c unocss.config.js --watch -o miniprogram/unocss.less",
+    "unocss:build": "unocss miniprogram/pages/**/*.wxml -c unocss.config.js -o  miniprogram/unocss.less"
+  },
   "keywords": [],
   "author": "",
   "license": "",
@@ -14,6 +17,8 @@
     "mobx-miniprogram-bindings": "^2.1.5"
   },
   "devDependencies": {
-    "miniprogram-api-typings": "^3.5.0"
+    "miniprogram-api-typings": "^3.6.0",
+    "unocss": "^0.45.24",
+    "unocss-preset-weapp": "^0.1.16"
   }
 }
