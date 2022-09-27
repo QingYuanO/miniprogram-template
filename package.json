@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "miniprogram-api-typings": "^3.6.0",
-    "unocss": "^0.45.24",
+    "unocss": "^0.45.25",
     "unocss-preset-weapp": "^0.1.16"
   }
 }
