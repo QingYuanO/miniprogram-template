@@ -10,14 +10,14 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@vant/weapp": "^1.10.4",
+    "@vant/weapp": "^1.10.14",
     "dayjs": "^1.11.5",
     "miniprogram-computed": "^4.4.0",
     "mobx-miniprogram": "^4.13.2",
     "mobx-miniprogram-bindings": "^2.1.5"
   },
   "devDependencies": {
-    "miniprogram-api-typings": "^3.6.0",
+    "miniprogram-api-typings": "^3.9.0",
     "unocss": "^0.45.25",
     "unocss-preset-weapp": "^0.1.16"
   }

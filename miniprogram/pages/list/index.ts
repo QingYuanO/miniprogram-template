@@ -1,10 +1,8 @@
 // pages/list/index.ts
-import BehaviorWithList, {
-  BehaviorWithListInjectData,
-  BehaviorWithListInjectOption,
-} from "@behaviors/BehaviorWithList";
-import { GlobalData } from "@models/global";
-import { getSingleImg } from "@service/api/img";
+
+import BehaviorWithList, { BehaviorWithListInjectData, BehaviorWithListInjectOption } from "@/behaviors/BehaviorWithList";
+import { GlobalData } from "@/models/global";
+import { getSingleImg } from "@/service/api/img";
 import { globalStore } from "./behavior";
 
 const listBehavior = BehaviorWithList({

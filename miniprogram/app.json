@@ -21,11 +21,6 @@
   },
   "lazyCodeLoading": "requiredComponents",
   "resolveAlias": {
-    "@utils/*": "utils/*",
-    "@components/*": "components/*",
-    "@behaviors/*": "behaviors/*",
-    "@service/*": "service/*",
-    "@pages/*": "pages/*",
-    "@models/*": "models/*"
+    "@/*": "/*"
   }
 }
