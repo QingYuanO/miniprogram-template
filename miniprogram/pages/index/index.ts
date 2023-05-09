@@ -6,7 +6,6 @@ import { toLoginPage, toListPage, toSomeNeedAuthPage } from "@/utils/toRoutePage
 import { behavior as computedBehavior } from "miniprogram-computed";
 import { indexAuth, testBehavior, testVisible } from "./behavior";
 
-
 Page<IIndexPageData, IIndexPageOption>({
   behaviors: [testBehavior, testVisible, computedBehavior, indexAuth],
   data: {
@@ -78,7 +77,7 @@ Page<IIndexPageData, IIndexPageOption>({
       );
     } else {
       toLoginPage({
-        success: (res) => {
+        success: res => {
           res.eventChannel;
           console.log(this);
         },

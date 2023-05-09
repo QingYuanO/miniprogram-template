@@ -1,1 +1,1 @@
-- 启动tailwind，在控制台执行`npm run dev:css`
+- 启动unocss，在控制台执行`npm run unocss` ,发布版本时执行`npm run unocss:build` 减小生成的css体积
