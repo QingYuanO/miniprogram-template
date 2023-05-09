@@ -17,8 +17,8 @@
     "mobx-miniprogram-bindings": "^2.1.5"
   },
   "devDependencies": {
-    "miniprogram-api-typings": "^3.9.0",
-    "unocss": "^0.45.25",
-    "unocss-preset-weapp": "^0.1.16"
+    "miniprogram-api-typings": "^3.9.1",
+    "unocss": "^0.51.12",
+    "unocss-preset-weapp": "^0.6.2"
   }
 }
