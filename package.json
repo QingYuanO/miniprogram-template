@@ -1,5 +1,5 @@
 {
-  "name": "miniprogram-ts-less-quickstart",
+  "name": "miniprogram-template",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -8,13 +8,14 @@
   },
   "keywords": [],
   "author": "",
-  "license": "",
+  "license": "MIT",
   "dependencies": {
-    "@vant/weapp": "^1.10.14",
+    "@vant/weapp": "^1.10.18",
     "dayjs": "^1.11.5",
     "miniprogram-computed": "^4.4.0",
     "mobx-miniprogram": "^4.13.2",
-    "mobx-miniprogram-bindings": "^2.1.5"
+    "mobx-miniprogram-bindings": "^2.1.5",
+    "rubic": "^0.5.0"
   },
   "devDependencies": {
     "miniprogram-api-typings": "^3.9.1",

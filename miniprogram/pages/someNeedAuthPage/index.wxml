@@ -1,2 +1,13 @@
 <!--pages/someNeedAuthPage/index.wxml-->
-<text>pages/someNeedAuthPage/index.wxml</text>
+
+<view class=" flex flex-col items-center space-y-16px ">
+  <template is="round" data="{{count,bg:'bg-red-300'}}"/>
+  <template is="round" data="{{count:doubleCount,bg:'bg-red-400'}}"/>
+  <view>
+    <van-button type="primary" custom-class="i-bg-blue-400" bind:click="increment" round>+</van-button>
+  </view>
+</view>
+
+<template name="round">
+  <view class=" w-100 h-100 rounded-full flex justify-center items-center text-hex-333 {{bg}}">{{count}}</view>
+</template>

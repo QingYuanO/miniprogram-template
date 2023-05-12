@@ -328,9 +328,9 @@
     fast-glob "^3.2.12"
     magic-string "^0.30.0"
 
-"@vant/weapp@^1.10.14":
+"@vant/weapp@^1.10.18":
   version "1.10.18"
-  resolved "https://registry.yarnpkg.com/@vant/weapp/-/weapp-1.10.18.tgz#8029e49c6f519cabe3da4e098070c3abfa6c6e24"
+  resolved "https://registry.npmmirror.com/@vant/weapp/-/weapp-1.10.18.tgz#8029e49c6f519cabe3da4e098070c3abfa6c6e24"
   integrity sha512-BEmBGVKTBfP7Re41k27Tm6lKjdWmEN0APxLWMeiYtXn7koVxrzSAdwZgZguUD7vm1lMsMhAgAIq0IMoMm/ubkQ==
 
 acorn@^8.8.2:
@@ -757,6 +757,11 @@ rfdc@^1.1.4:
   version "1.3.0"
   resolved "https://registry.npmjs.org/rfdc/-/rfdc-1.3.0.tgz"
   integrity sha512-V2hovdzFbOi77/WajaSMXk2OLm+xNIeQdMMuB7icj7bk6zi2F8GGAxigcnDFpJHbNyNcgyJDiP+8nOrY5cZGrA==
+
+rubic@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npmmirror.com/rubic/-/rubic-0.5.0.tgz#c1ad5c375a5c9bd045cb97c4aa3ea707ed84580d"
+  integrity sha512-/aPpzCmcgojXjEmPCR1YGg0w2eTcB2jzwVmOjASl4fODIn8nZ3mxj+2GcKcTP4xZNEoNfnUd+i5l4imt/cMEEQ==
 
 run-parallel@^1.1.9:
   version "1.2.0"
