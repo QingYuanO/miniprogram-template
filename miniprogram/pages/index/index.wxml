@@ -1,14 +1,12 @@
 <!--index.wxml-->
 <view class="m-4px">
   <van-cell-group>
-    <van-cell title="BehaviorWithAuth" value="BehaviorWithAuth例子" is-link bind:click="toAuthPage" />
-    <van-cell title="BehaviorWithList" value="BehaviorWithList例子" is-link bind:click="toList" />
-    <van-cell title="BehaviorWithVisible" value="{{testVisibleStr}}" is-link bind:click="testToggle" />
-    <van-cell title="userStore" value="{{userStore}}" is-link bind:click="update_user" />
-    <van-cell title="globalStore" value="{{globalStore}}" is-link bind:click="update" />
-    <van-cell title="{{loginTitle}}" is-link bind:click="logout" border="{{false}}" />
+    <van-cell title="BehaviorWithAuth" value="BehaviorWithAuth例子" is-link bind:click="toSomeNeedAuthPage" />
+    <van-cell title="BehaviorWithList" value="BehaviorWithList例子" is-link bind:click="toListPage" />
+    <van-cell title="BehaviorWithVisible" value="{{visibleStr}}" is-link bind:click="toggle" />
+    <van-cell title="{{loginTitle}}" is-link bind:click="auth" border="{{false}}" />
   </van-cell-group>
-  <show when="{{testVisible}}">
+  <show when="{{visible}}">
     a
   </show>
 </view>

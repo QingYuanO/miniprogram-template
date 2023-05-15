@@ -1,6 +1,5 @@
-<van-button type="primary" bind:click="changeTestListExtraData">changeTestListExtraData</van-button>
 <view class="list-container">
-	<view class="list-item" wx:for="{{list.listData}}" w:for-item="item" wx:for-index="idx" wx:key="unique">
-		{{idx}}
-	</view>
+  <view class="list-item" wx:for="{{listData.list}}" w:for-item="item" wx:for-index="idx" wx:key="unique">
+    {{idx}}
+  </view>
 </view>

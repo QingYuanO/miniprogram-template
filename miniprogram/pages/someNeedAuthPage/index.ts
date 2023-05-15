@@ -1,17 +1,15 @@
-import { computed, definePage, ref } from "rubic";
-
+import { useCounterStore } from "@/stores/counter";
+import { computed, definePage, onLoad, ref, storeToRefs } from "rubic";
 
 definePage({
   setup(query, ctx) {
-    const count = ref(0);
-    const doubleCount = computed(() => count.value * 2);
-    const increment = () => {
-      count.value++;
-    };
+    const store = useCounterStore();
+    const { count, doubleCount } = storeToRefs(store);
+    onLoad(() => {});
     return {
+      increment: store.increment,
       count,
       doubleCount,
-      increment,
     };
   },
 });

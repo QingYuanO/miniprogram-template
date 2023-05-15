@@ -1,68 +1,31 @@
 // pages/list/index.ts
 
-import BehaviorWithList, { BehaviorWithListInjectData, BehaviorWithListInjectOption } from "@/behaviors/BehaviorWithList";
-import { GlobalData } from "@/models/global";
-import { getSingleImg } from "@/service/api/img";
-import { globalStore } from "./behavior";
+import useInfiniteList from "@/hooks/useInfiniteList";
+import { computed, definePage, watch } from "rubic";
 
-const listBehavior = BehaviorWithList({
-  namespace: "list",
-  isAutoNextPage: true,
-  isAutoLoad: true,
-  getListApi: (data) => {
-    console.log(data);
-    
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          listData: new Array(10).fill(1),
-          total: 8,
-          isLast: false,
+definePage({
+  setup(props, ctx) {
+    const { listData } = useInfiniteList<number>({
+      isAutoInitLoad: true,
+      isAutoFetchNext: true,
+      fetchListApi: data => {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve({
+              list: new Array(10).fill(1),
+              total: 8,
+              hasNextPage: false,
+            });
+          }, 1000);
         });
-      }, 1000);
+      },
     });
+    console.log(listData.value);
+    watch(listData, () => {
+      console.log(listData.value);
+    });
+    return {
+      listData,
+    };
   },
 });
-
-Page<IListPageData, IListPageOption>({
-  behaviors: [globalStore, listBehavior],
-  data: {
-    testListExtraData:{a:1}
-  },
-  async onLoad() {
-    const { numA, numB, sum } = this.data?.global ?? {};
-    wx.setNavigationBarTitle({ title: `${numA}-${numB}-${sum}` });
-    const res= await getSingleImg();
-    this.setData({test:res?.data})
-  },
-  listExtraData:['testListExtraData','test'],
-  onReady() {},
-
-  onShow() {
-    
-  },
-
-  onHide() {},
-
-  onUnload() {},
-
-  onPullDownRefresh() {},
-
-  onReachBottom() {},
-  changeTestListExtraData(){
-    this.setData({
-      testListExtraData:{b:2}
-    })
-  },
-});
-
-interface IListPageOption extends BehaviorWithListInjectOption {
-  behaviors?: string[];
-  changeTestListExtraData:() => void
-}
-
-interface IListPageData {
-  list?: BehaviorWithListInjectData;
-  global?: Partial<GlobalData>;
-  testListExtraData?:Record<string,any>
-}
