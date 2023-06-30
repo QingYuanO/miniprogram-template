@@ -4,10 +4,11 @@ import { transformerClass } from "unocss-preset-weapp/transformer";
 const include = [/\.wxml$/];
 
 export default defineConfig({
-  include: [/\.wxml$/],
+  content:{
+    pipeline:{
+      include
+    }
+  },
   presets: [presetWeapp({})],
-  transformers: [
-    // options 见https://github.com/MellowCo/unocss-preset-weapp/tree/main/src/transformer/transformerClass
-    transformerClass({ include }),
-  ],
+  separators:'__'
 });
