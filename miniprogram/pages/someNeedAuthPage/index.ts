@@ -1,13 +1,15 @@
-import { useCounterStore } from "@/stores/counter";
-import { computed, definePage, onLoad, ref, storeToRefs } from "rubic";
+import { computed, definePage, onLoad, ref } from "@vue-mini/core";
 
 definePage({
   setup(query, ctx) {
-    const store = useCounterStore();
-    const { count, doubleCount } = storeToRefs(store);
+    const count = ref(0);
+    const doubleCount = computed(() => count.value * 2);
+    const increment = () => {
+      count.value++;
+    };
     onLoad(() => {});
     return {
-      increment: store.increment,
+      increment,
       count,
       doubleCount,
     };

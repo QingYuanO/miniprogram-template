@@ -1,10 +1,10 @@
 // pages/list/index.ts
 
 import useInfiniteList from "@/hooks/useInfiniteList";
-import { computed, definePage, watch } from "rubic";
+import { defineComponent, watch } from "@vue-mini/core";
 
-definePage({
-  setup(props, ctx) {
+defineComponent({
+  setup() {
     const { listData } = useInfiniteList<number>({
       isAutoInitLoad: true,
       isAutoFetchNext: true,

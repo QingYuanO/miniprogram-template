@@ -1,14 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-} 
 
+page {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --radius: 10rpx;
+  --button-border-radius: var(--radius);
+  --button-primary-background-color: hsl(var(--primary));
+  --button-primary-border-color: hsl(var(--border));
 
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}

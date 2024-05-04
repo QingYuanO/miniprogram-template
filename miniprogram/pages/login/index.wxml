@@ -1,4 +1,4 @@
 <!--pages/login/index.wxml-->
-<view class="container">
-    <van-button type="primary" bind:click="setToken">登录</van-button>
+<view class="w-full h-screen flex items-center justify-center">
+  <van-button type="primary" bind:click="setToken">登录</van-button>
 </view>

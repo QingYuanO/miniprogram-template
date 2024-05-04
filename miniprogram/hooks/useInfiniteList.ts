@@ -1,4 +1,4 @@
-import { onLoad, onReachBottom, ref, shallowRef } from "rubic";
+import { onLoad, onReachBottom, ref, shallowRef } from "@vue-mini/core";
 
 type SearchType = Record<string, any>;
 
@@ -60,6 +60,7 @@ function useInfiniteList<D = unknown>(option: UseInfiniteListParams<D>) {
         ...realSearch,
       });
       isInitLoading.value = false;
+      isFetchNext.value = false;
       listData.value = data;
       listParams.value = {
         page: listParams.value.page + 1,

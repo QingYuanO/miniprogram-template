@@ -1,18 +1,34 @@
-// import { onShow, ref } from "rubic";
+import { toLoginPage } from "@/utils/toRoutePage";
+import useLocalState from "./useLocalState";
 
-// export default function useAccessFun({}:{
-//   fun:(arg: any) => any
-// }) {
-//   const isLogin = ref({
-//     get(){
-//       return 'a'
-//     }
-//   });
-//   onShow(() => {
-//     isLogin.value = !!wx.getStorageSync("token");
-//   });
+export default function useAccessFun<T extends FunctionArgs>(fun: T, option?: { isTipLogin?: boolean; access?: string[] }) {
+  const { isTipLogin = true, access } = option ?? {};
+  const token = useLocalState<string>("token");
+  const userAccess = useLocalState<string[]>("access");
 
-//   return {
-//     isLogin,
-//   };
-// }
+  return (...args: ArgumentsType<T>) => {
+    if (!token.value) {
+      if (isTipLogin) {
+        wx.showModal({
+          content: "请登录!",
+          success(res) {
+            if (res.confirm) {
+              toLoginPage();
+            }
+          },
+        });
+      }
+      return;
+    }
+    if (access && !access?.some(item => userAccess.value?.includes(item))) {
+      wx.showModal({
+        content: "没有访问权限!",
+        showCancel: false,
+        confirmText: "关闭",
+        confirmColor: "#000",
+      });
+      return;
+    }
+    fun(args);
+  };
+}

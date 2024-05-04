@@ -1,4 +1,4 @@
-import { Ref, ref } from "rubic";
+import { Ref, ref } from "@vue-mini/core";
 
 export default function useBoolean(initialValue?: boolean): [
   Ref<boolean>,

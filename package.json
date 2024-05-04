@@ -13,18 +13,21 @@
   "license": "MIT",
   "dependencies": {
     "@vant/weapp": "^1.10.18",
+    "@vue-mini/core": "^1.0.0-rc.9",
     "dayjs": "^1.11.5",
-    "miniprogram-computed": "^4.4.0",
-    "mobx-miniprogram": "^4.13.2",
-    "mobx-miniprogram-bindings": "^2.1.5",
-    "rubic": "^0.5.0"
+    "miniprogram-computed": "^4.4.0"
   },
   "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
     "@weapp-tailwindcss/cli": "^1.0.0",
     "mini-program-iconfont-cli": "^0.6.1",
     "miniprogram-api-typings": "^3.12.2",
     "postcss": "^8.4.38",
+    "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.3",
-    "weapp-tailwindcss": "^3.2.0"
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.4.5",
+    "weapp-tailwindcss": "^3.2.0",
+    "weapp-tailwindcss-children": "^0.1.0"
   }
 }

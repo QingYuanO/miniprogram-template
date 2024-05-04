@@ -1,13 +1,22 @@
-import { Ref, UnwrapRef, onShow, ref } from "rubic";
+import { Ref, UnwrapRef, customRef, onShow, ref } from "@vue-mini/core";
 
-export default function useLocalState<D = unknown>(key: string): [Ref<UnwrapRef<D>>, (value: UnwrapRef<D>) => void] {
-  const data = ref<D>(wx.getStorageSync<D>(key));
-  onShow(() => {
-    data.value = wx.getStorageSync(key);
+export default function useLocalState<D = unknown>(key: string, defaultValue?: D): Ref<D> {
+  const value = customRef<D>((track, trigger) => {
+    return {
+      get() {
+        track();
+        return wx.getStorageSync<D>(key) || defaultValue!;
+      },
+      set(newValue) {
+        wx.setStorageSync<D>(key, newValue);
+        trigger();
+      },
+    };
   });
-  const setValue = (value: UnwrapRef<D>) => {
-    data.value = value;
-    wx.setStorageSync(key, value);
-  };
-  return [data, setValue];
+
+  onShow(() => {
+    value.value = wx.getStorageSync<D>(key) || defaultValue!;
+  });
+
+  return value;
 }

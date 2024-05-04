@@ -1,24 +1,20 @@
 import { toLoginPage, toListPage, toSomeNeedAuthPage } from "@/utils/toRoutePage";
-import { computed, definePage } from "rubic";
 import useBoolean from "@/hooks/useBoolean";
 import useLocalState from "@/hooks/useLocalState";
 import useIsLogin from "@/hooks/useIsLogin";
-import { createNormalAuthBehavior } from "@/behaviors/BehaviorWithAuth";
+import { defineComponent, computed } from "@vue-mini/core";
+import useAccessFun from "@/hooks/useAccessFun";
 
-const auth = createNormalAuthBehavior({ isPageNeedLogin: true, accessPageNeed: [] });
-
-definePage({
-  setup(props, ctx) {
-    console.log(ctx);
-
-    const [visible, { toggle }] = useBoolean();
-    const [, setToken] = useLocalState<string>("token");
-    const isLogin = useIsLogin();
+defineComponent({
+  setup() {
+    const [visible, { toggle }] = useBoolean(false);
+    const token = useLocalState<string>("token");
+    const isLogin = useIsLogin(token);
     const visibleStr = computed(() => visible.value.toString());
     const loginTitle = computed(() => (isLogin.value ? "登出" : "登录"));
     const auth = () => {
       if (isLogin.value) {
-        setToken("");
+        token.value = "";
       } else {
         toLoginPage({});
       }
@@ -30,9 +26,8 @@ definePage({
       loginTitle,
       auth,
       toggle,
-      toSomeNeedAuthPage,
+      toSomeNeedAuthPage: useAccessFun(toSomeNeedAuthPage),
       toListPage,
     };
   },
-  behaviors: [auth],
 });
