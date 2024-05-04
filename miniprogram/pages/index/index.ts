@@ -3,9 +3,14 @@ import { computed, definePage } from "rubic";
 import useBoolean from "@/hooks/useBoolean";
 import useLocalState from "@/hooks/useLocalState";
 import useIsLogin from "@/hooks/useIsLogin";
+import { createNormalAuthBehavior } from "@/behaviors/BehaviorWithAuth";
+
+const auth = createNormalAuthBehavior({ isPageNeedLogin: true, accessPageNeed: [] });
 
 definePage({
   setup(props, ctx) {
+    console.log(ctx);
+
     const [visible, { toggle }] = useBoolean();
     const [, setToken] = useLocalState<string>("token");
     const isLogin = useIsLogin();
@@ -29,4 +34,5 @@ definePage({
       toListPage,
     };
   },
+  behaviors: [auth],
 });

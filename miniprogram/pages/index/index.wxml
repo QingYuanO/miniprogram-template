@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="m-4px">
+<view class="m-1 bg-red-300">
   <van-cell-group>
     <van-cell title="BehaviorWithAuth" value="BehaviorWithAuth例子" is-link bind:click="toSomeNeedAuthPage" />
     <van-cell title="BehaviorWithList" value="BehaviorWithList例子" is-link bind:click="toListPage" />

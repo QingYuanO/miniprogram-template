@@ -137,7 +137,7 @@ const BehaviorWithAuth = (params: IBehaviorWithAuth) => {
 
 const createNormalAuthBehavior = (params?: {
   isPageNeedLogin: boolean;
-  accessPageNeed: string[];
+  accessPageNeed?: string[];
 }) => {
   const { isPageNeedLogin, accessPageNeed } = params ?? {};
 
