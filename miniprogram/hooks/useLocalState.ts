@@ -1,4 +1,4 @@
-import { Ref, UnwrapRef, customRef, onShow, ref } from "@vue-mini/core";
+import { customRef, onShow, Ref } from '@vue-mini/core';
 
 export default function useLocalState<D = unknown>(key: string, defaultValue?: D): Ref<D> {
   const value = customRef<D>((track, trigger) => {

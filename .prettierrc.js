@@ -1,10 +1,10 @@
 /** @type {import("@ianvs/prettier-plugin-sort-imports").PrettierConfig} */
 
 module.exports = {
-  plugins: ["@ianvs/prettier-plugin-sort-imports","prettier-plugin-tailwindcss"],
+  plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
   tailwindConfig: './tailwind.config.js',
-  tailwindFunctions: ['cn','cva','clsx'],
-  tailwindAttributes: ['hover-class','placeholder-class'],
+  tailwindFunctions: ['cn', 'cva', 'clsx'],
+  tailwindAttributes: ['hover-class', 'placeholder-class'],
   arrowParens: 'avoid', // 箭头函数只有一个参数的时候可以忽略括号
   bracketSpacing: true, // 括号内部不要出现空格
   endOfLine: 'lf', // 行结束符使用 Unix 格式
@@ -21,16 +21,16 @@ module.exports = {
   semicolons: true, // 在语句末尾打印分号
   importOrder: [
     '<THIRD_PARTY_MODULES>',
-    '^@/src/components/(.*)$',
+    '^@/components/(.*)$',
     '',
-    '^@/src/hooks',
-    '^@/src/utils',
-    '^@/src/store/(.*)$',
-    '^@/src/utils/(.*)$',
-    '^@/src/service/(.*)$',
+    '^@/hooks',
+    '^@/utils',
+    '^@/store/(.*)$',
+    '^@/utils/(.*)$',
+    '^@/service/(.*)$',
     '',
-    '^@/src/constants/(.*)$',
-    '^@/src/assets/(.*)$',
+    '^@/constants/(.*)$',
+    '^@/assets/(.*)$',
     '^[./]',
   ],
   importOrderBuiltinModulesToTop: true,

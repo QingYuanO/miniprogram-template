@@ -1,4 +1,4 @@
-<!--index.wxml-->
+<!-- index.wxml -->
 <view class="p-1">
   <van-cell-group>
     <van-cell title="someNeedAuthPage" is-link bind:click="toSomeNeedAuthPage" />

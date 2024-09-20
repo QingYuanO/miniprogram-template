@@ -27,7 +27,7 @@ export interface CustomResult {
   [key: string]: any;
 }
 
-export type RequestPrimoseResult = WechatMiniprogram.RequestSuccessCallbackResult<CustomResult>;
+export type RequestPromiseResult = WechatMiniprogram.RequestSuccessCallbackResult<CustomResult>;
 
 export enum HTTP_STATUS {
   SUCCESS = 200,
@@ -76,7 +76,7 @@ const ApiService = {
         mask: true,
       });
     }
-    return new Promise<RequestPrimoseResult>(function (resolve, reject) {
+    return new Promise<RequestPromiseResult>(function (resolve, reject) {
       const task = wx.request<CustomResult>({
         url: (baseUrl ?? BASE_URL) + url,
         data,
