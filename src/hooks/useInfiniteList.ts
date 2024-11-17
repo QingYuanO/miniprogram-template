@@ -1,4 +1,4 @@
-import { onLoad, onReachBottom, ref, shallowRef } from "@vue-mini/core";
+import { onLoad, onReachBottom, ref, shallowRef } from '@vue-mini/core';
 
 type SearchType = Record<string, any>;
 
@@ -54,22 +54,25 @@ function useInfiniteList<D = unknown>(option: UseInfiniteListParams<D>) {
       isFetchNext.value = true;
       const { search } = listParams.value;
       const realSearch = { ...(search ?? {}), ...externalSearch };
+
       const data = await fetchListApi({
         page: 1,
         pageSize: defaultPageSize,
         ...realSearch,
       });
-      isInitLoading.value = false;
-      isFetchNext.value = false;
+
       listData.value = data;
       listParams.value = {
-        page: listParams.value.page + 1,
+        page: 2,
         pageSize: listParams.value.pageSize,
         search: realSearch,
       };
     } catch (error) {
       isInitLoading.value = false;
       console.log(error);
+    } finally {
+      isInitLoading.value = false;
+      isFetchNext.value = false;
     }
   };
   const fetchNextPage = async (externalSearch: SearchType = {}) => {

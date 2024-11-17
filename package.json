@@ -14,8 +14,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@vant/weapp": "^1.10.18",
-    "@vue-mini/core": "^1.1.0",
+    "@vant/weapp": "^1.11.7",
+    "@vue-mini/core": "^1.2.0",
     "dayjs": "^1.11.5",
     "miniprogram-computed": "^4.4.0",
     "weapp-navigate": "^1.1.1"
@@ -30,8 +30,8 @@
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.4.5",
-    "weapp-tailwindcss": "^3.2.0",
+    "weapp-tailwindcss": "^3.7.0",
     "weapp-tailwindcss-children": "^0.1.0",
-    "weapp-vite": "latest"
+    "weapp-vite": "^1.7.6"
   }
 }
