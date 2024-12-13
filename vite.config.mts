@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { UnifiedViteWeappTailwindcssPlugin as uvwt } from 'weapp-tailwindcss/vite';
+import { VantResolver } from 'weapp-vite/auto-import-components/resolvers';
 import { defineConfig } from 'weapp-vite/config';
 
 export default defineConfig({
@@ -24,6 +25,12 @@ export default defineConfig({
           replacement: path.resolve(__dirname, 'src'),
         },
       ],
+    },
+    enhance: {
+      autoImportComponents: {
+        globs: ['src/components/**/*', 'src/pages/**/*'],
+        resolvers: [VantResolver()],
+      },
     },
   },
 });

@@ -10,10 +10,7 @@ export default defineAppJson({
   },
   sitemapLocation: 'sitemap.json',
   usingComponents: {
-    'van-button': '@vant/weapp/button/index',
-    'van-cell': '@vant/weapp/cell/index',
-    'van-cell-group': '@vant/weapp/cell-group/index',
-    show: '@/components/Show/index',
+    show: '@/components/show/index',
     iconfont: '@/components/iconfont/iconfont',
   },
   lazyCodeLoading: 'requiredComponents',
