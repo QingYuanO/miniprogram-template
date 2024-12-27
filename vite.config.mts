@@ -28,7 +28,7 @@ export default defineConfig({
     },
     enhance: {
       autoImportComponents: {
-        globs: ['src/components/**/*', 'src/pages/**/*'],
+        globs: ['src/components/**/*'],
         resolvers: [VantResolver()],
       },
     },

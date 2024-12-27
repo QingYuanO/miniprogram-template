@@ -33,6 +33,6 @@
     "typescript": "^5.4.5",
     "weapp-tailwindcss": "^3.7.0",
     "weapp-tailwindcss-children": "^0.1.0",
-    "weapp-vite": "^1.9.0"
+    "weapp-vite": "^1.9.3"
   }
 }
